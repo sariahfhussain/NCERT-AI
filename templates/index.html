@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT AI - Your Smart Study Buddy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: '#d4c4b4',
+                        offwhite: '#fcfcf4',
+                        lavender: '#9384ba',
+                        accent: '#f16464',
+                        softgreen: '#85ba95',
+                        deepblue: '#446484',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.pinimg.com/736x/f6/60/31/f66031ddc8de03879d7384f1cf1451e3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .modal.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .skranji {
+            font-family: 'Skranji', cursive;
+        }
+    </style>
+</head>
+<body class="bg-offwhite font-sans">
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-2xl font-bold text-white">NCERT AI</h1>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-image min-h-screen flex items-center justify-center text-center text-white relative">
+        <div class="max-w-4xl px-6">
+            <h1 class="text-6xl md:text-7xl font-extrabold mb-8 animate-fade-in">Welcome to NCERT AI!</h1>
+            <p class="text-2xl md:text-3xl mb-16 font-semibold">Your smart study buddy for Class 9 & 10</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <button onclick="openSignUpModal()" class="bg-[#d48664] hover:bg-opacity-90 text-white font-semibold py-5 px-12 rounded-full text-xl transition-all duration-300 btn-hover">
+                    Sign Up
+                </button>
+                <button onclick="openLoginModal()" class="bg-white hover:bg-opacity-90 text-[#d48664] font-semibold py-5 px-12 rounded-full text-xl transition-all duration-300 btn-hover">
+                    Log In
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center">
+            <a href="#features" class="text-white animate-bounce">
+                <i class="fas fa-chevron-down text-3xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6 max-w-7xl mx-auto">
+        <h2 class="text-5xl font-bold text-center text-deepblue mb-16 skranji">Why Choose NCERT AI?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16" style="background-color: #e3f5ea; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-question-circle text-3xl" style="color: #85ba95;"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">Ask Questions</h3>
+                <p class="text-gray-600">Ask any question from NCERT textbooks and get instant, accurate answers powered by our advanced AI.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16 bg-lavender bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-book-open text-3xl text-lavender"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">Study by Chapter</h3>
+                <p class="text-gray-600">Organized subjects and chapters from Class 9 & 10 for structured learning and easy navigation.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16" style="background-color: #fde7e7; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-tasks text-3xl" style="color: #f46464;"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">Practice Quizzes</h3>
+                <p class="text-gray-600">Reinforce your learning with chapter-wise quizzes and track your progress over time.</p>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16" style="background-color: #e3f5ea; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-chalkboard-teacher text-3xl" style="color: #85ba95;"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">Teacher Dashboard</h3>
+                <p class="text-gray-600">For educators to create classes, assign quizzes, and monitor student performance.</p>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16 bg-lavender bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-brain text-3xl text-lavender"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">AI-Powered</h3>
+                <p class="text-gray-600">Our RAG model ensures answers are accurate, relevant, and directly from NCERT textbooks.</p>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 feature-card">
+                <div class="w-16 h-16" style="background-color: #fde7e7; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-mobile-alt text-3xl" style="color: #f46464;"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-deepblue mb-3">Mobile Friendly</h3>
+                <p class="text-gray-600">Access NCERT AI anytime, anywhere with our fully responsive platform.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-deepblue text-white py-6 px-4 text-sm">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <h3 class="text-xl font-bold mb-2">NCERT AI</h3>
+                <p>Your smart study buddy for Class 9 & 10 NCERT textbooks.</p>
+            </div>
+            <div>
+                <h4 class="text-base font-semibold mb-2">Quick Links</h4>
+                <ul class="space-y-1">
+                    <li><a href="#" class="hover:text-beige transition">Home</a></li>
+                    <li><a href="#features" class="hover:text-beige transition">Features</a></li>
+                    <li><a href="#" class="hover:text-beige transition">About Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-base font-semibold mb-2">Contact</h4>
+                <p><i class="fas fa-envelope mr-2"></i> support@ncertai.com</p>
+                <p class="mt-1"><i class="fas fa-phone mr-2"></i> +91 9876543210</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-4 pt-4 border-t border-gray-600 text-center">
+            <p>&copy; 2025 NCERT AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 relative">
+            <button onclick="closeSignUpModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h2 class="text-3xl font-bold text-deepblue mb-6 text-center">Create Account</h2>
+            <form class="space-y-4" method="POST" action="/signup">
+                <div>
+                    <label for="name" class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent" required>
+                </div>
+                <div>
+                    <label for="class" class="block text-gray-700 mb-2">Class</label>
+                    <select id="class" name="class" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent" required>
+                        <option value="">Select your class</option>
+                        <option value="9">Class 9</option>
+                        <option value="10">Class 10</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-lavender hover:bg-opacity-90 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 btn-hover">
+                    Sign Up
+                </button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">
+                Already have an account? <a href="#" onclick="switchToLogin()" class="text-lavender font-medium">Log in</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 relative">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h2 class="text-3xl font-bold text-deepblue mb-6 text-center">Welcome Back</h2>
+            <form class="space-y-4">
+                <div>
+                    <label for="loginEmail" class="block text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="loginEmail" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent">
+                </div>
+                <div>
+                    <label for="loginPassword" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="loginPassword" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lavender focus:border-transparent">
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" class="h-4 w-4 text-lavender focus:ring-lavender border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-gray-700">Remember me</label>
+                    </div>
+                    <a href="#" class="text-sm text-lavender font-medium">Forgot password?</a>
+                </div>
+                <button type="submit" class="w-full bg-lavender hover:bg-opacity-90 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 btn-hover">
+                    Log In
+                </button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">
+                Don't have an account? <a href="#" onclick="switchToSignUp()" class="text-lavender font-medium">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openSignUpModal() {
+            document.getElementById('signupModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSignUpModal() {
+            document.getElementById('signupModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function switchToLogin() {
+            closeSignUpModal();
+            openLoginModal();
+        }
+        
+        function switchToSignUp() {
+            closeLoginModal();
+            openSignUpModal();
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('signupModal')) {
+                closeSignUpModal();
+            }
+            if (event.target == document.getElementById('loginModal')) {
+                closeLoginModal();
+            }
+        }
+    </script>
+</body>
+</html>

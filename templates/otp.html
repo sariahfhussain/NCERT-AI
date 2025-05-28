@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP | NCERT AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelgreen: '#d1fae5',
+                        pastelpurple: '#e9d5ff',
+                        lavender: '#9384ba',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .otp-input {
+            width: 3rem !important;
+            height: 3.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 0.5rem;
+            margin: 0 0.25rem;
+            transition: all 0.3s;
+        }
+        
+        .otp-input:focus {
+            border-color: #9384ba;
+            box-shadow: 0 0 0 3px rgba(147, 132, 186, 0.2);
+            outline: none;
+        }
+        
+        .otp-input.filled {
+            border-color: #9384ba;
+            background-color: rgba(147, 132, 186, 0.1);
+        }
+        
+        .resend-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-pastelgreen min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md">
+        <!-- Header -->
+        <div class="bg-white py-6 px-8 text-center">
+            <div class="w-16 h-16 bg-lavender bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-lock text-3xl text-lavender"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Verify Your Account</h1>
+            <p class="text-gray-600">We've sent a 6-digit code to your email</p>
+            
+        </div>
+        
+        <!-- OTP Form -->
+        <div class="px-8 py-6">
+            <form id="otpForm" method="POST" action="{{ url_for('verify_otp') }}">
+                <div class="flex justify-center mb-8">
+                    <input type="text" maxlength="1" class="otp-input" name="otp1" data-index="1" autofocus>
+                    <input type="text" maxlength="1" class="otp-input" name="otp2" data-index="2">
+                    <input type="text" maxlength="1" class="otp-input" name="otp3" data-index="3">
+                    <input type="text" maxlength="1" class="otp-input" name="otp4" data-index="4">
+                    <input type="text" maxlength="1" class="otp-input" name="otp5" data-index="5">
+                    <input type="text" maxlength="1" class="otp-input" name="otp6" data-index="6">
+                </div>
+                <input type="hidden" name="otp" id="otp-hidden">
+                <button type="submit" class="w-full bg-lavender hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 mb-4 flex items-center justify-center">
+                    <span>Verify Now</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <div class="text-center text-gray-500">
+                    <button type="button" class="resend-btn text-lavender font-medium ml-1">Resend</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Footer -->
+        <div class="bg-gray-50 px-8 py-4 text-center">
+            <p class="text-gray-500 text-sm">Having trouble? <a href="#" class="text-lavender font-medium">Contact support</a></p>
+        </div>
+    </div>
+
+    <script>
+        // OTP input handling
+        const otpInputs = document.querySelectorAll('.otp-input');
+        
+        otpInputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const index = parseInt(e.target.dataset.index);
+                
+                if (value.length === 1) {
+                    e.target.classList.add('filled');
+                    
+                    // Move to next input if available
+                    if (index < 6) {
+                        otpInputs[index].focus();
+                    }
+                } else {
+                    e.target.classList.remove('filled');
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                
+                // Handle backspace
+                if (e.key === 'Backspace' && e.target.value === '' && index > 1) {
+                    otpInputs[index - 2].focus();
+                }
+            });
+        });
+        
+        // Form submission
+        document.getElementById('otpForm').addEventListener('submit', (e) => {
+            // Collect OTP values
+            let otp = '';
+            document.querySelectorAll('.otp-input').forEach(input => {
+                otp += input.value;
+            });
+            document.getElementById('otp-hidden').value = otp;
+            // Allow form to submit (no e.preventDefault())
+        });
+        
+        // Resend OTP
+        document.querySelector('.resend-btn').addEventListener('click', () => {
+            alert('New OTP has been sent to your email!');
+        });
+    </script>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="mb-4 text-center text-red-600 font-semibold">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>
