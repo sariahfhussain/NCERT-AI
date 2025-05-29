@@ -1,20 +1,36 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 import random
 import os
+from utils.pdf_processor import PDFProcessor
+from utils.rag_utils import RAGSystem
+from dotenv import load_dotenv
+from transformers import pipeline
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kimmikookiez@gmail.com'
-app.config['MAIL_PASSWORD'] = 'gqdn bomk beku mexq'
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'kimmikookiez@gmail.com')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'gqdn bomk beku mexq')
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+
+# RAG and LLM setup
+pdf_processor = PDFProcessor()
+rag_system = RAGSystem()
+qa_pipeline = pipeline(
+    "text-generation",
+    model="google/flan-t5-small",
+    device=-1  # CPU only
+)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,6 +38,16 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     is_verified = db.Column(db.Boolean, default=False)
+    # Add class_selected if you want class 9/10 logic
+
+@app.before_first_request
+def initialize_rag():
+    """Initialize RAG system if not already done"""
+    if not os.path.exists("utils/vector_store.faiss"):
+        if not os.path.exists("static/ncert_pdfs"):
+            os.makedirs("static/ncert_pdfs")
+        documents = pdf_processor.process_directory("static/ncert_pdfs")
+        rag_system.create_vector_store(documents)
 
 @app.route('/')
 def home():
@@ -90,6 +116,54 @@ def logout():
 @app.route('/science9')
 def science9():
     return render_template('science9.html')
+
+@app.route('/ask', methods=['POST'])
+def ask_question():
+    if 'user_id' not in session:
+        return jsonify({"error": "Please login first"}), 401
+
+    data = request.json
+    question = data.get('question')
+    chapter = data.get('chapter')
+
+    if not question:
+        return jsonify({"error": "Question is required"}), 400
+
+    # Search with filters
+    filters = {}
+    if chapter:
+        filters["chapter"] = f"Chapter {chapter.split('_')[1].replace('C', '')}"
+
+    results = rag_system.search(question, filters=filters)
+
+    if not results:
+        return jsonify({
+            "answer": "I couldn't find relevant information in the textbook.",
+            "sources": []
+        })
+
+    # Generate answer using lightweight LLM
+    context = "\n".join([f"Source {i+1}: {res['text']}" for i, res in enumerate(results)])
+    prompt = f"""Answer this question based on the NCERT textbook context:
+
+Question: {question}
+
+Context:
+{context}
+
+Answer in simple language suitable for a 9th grade student:"""
+
+    answer = qa_pipeline(
+        prompt,
+        max_length=200,
+        do_sample=True,
+        temperature=0.3
+    )[0]['generated_text']
+
+    return jsonify({
+        "answer": answer,
+        "sources": list(set(res['metadata']['source'] for res in results))
+    })
 
 if __name__ == '__main__':
     with app.app_context():

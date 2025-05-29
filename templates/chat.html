@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT AI Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'lavender': '#9384ba',
+                        'green': '#85ba95',
+                        'red': '#f16464',
+                        'softblue': '#446484',
+                        'bg': '#fcfcf4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .thinking-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #446484;
+            margin: 0 2px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        .thinking-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .thinking-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .chat-container {
+            height: calc(100vh - 220px);
+        }
+        
+        @media (max-width: 640px) {
+            .chat-container {
+                height: calc(100vh - 200px);
+            }
+        }
+        
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #9384ba;
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #7a6b9e;
+        }
+    </style>
+</head>
+<body class="bg-bg min-h-screen font-sans">
+    <!-- Navbar -->
+    <nav class="bg-transparent py-4 px-6 w-full fixed top-0 z-10">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-robot text-lavender text-2xl mr-2"></i>
+                <h1 class="text-2xl font-bold text-softblue">NCERT AI</h1>
+            </div>
+            <div class="relative">
+                <select id="chapterSelect" class="appearance-none bg-white rounded-full px-4 py-1 pr-8 text-sm text-softblue border border-lavender focus:outline-none focus:ring-2 focus:ring-lavender focus:border-transparent">
+                    <option>Science: Gravitation</option>
+                    <option>Mathematics: Algebra</option>
+                    <option>Social Science: Democracy</option>
+                    <option>English: Literature</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-lavender">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto pt-24 pb-20 px-4">
+        <!-- Hero Section -->
+        <section class="text-center mb-8">
+            <div class="inline-block bg-white rounded-full p-3 shadow-sm mb-4">
+                <i class="fas fa-book-open text-3xl text-lavender"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-softblue mb-2">📚 Ask NCERT AI</h1>
+            <p class="text-lg text-gray-600 mb-1">"Your personal study assistant for CBSE Class 9 & 10."</p>
+            <p class="text-sm text-gray-500">"Ask any question from your selected chapter, and our AI will answer using NCERT textbooks."</p>
+        </section>
+
+        <!-- Chapter Badge -->
+        <div class="flex justify-center mb-4">
+            <div class="bg-white rounded-full px-4 py-2 shadow-sm flex items-center">
+                <span class="text-sm font-medium text-softblue mr-2">Currently studying:</span>
+                <span class="bg-lavender text-white text-sm px-3 py-1 rounded-full">Science: Gravitation</span>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="chat-container p-4 overflow-y-auto custom-scrollbar space-y-4">
+                <!-- AI Message -->
+                <div class="fade-in flex items-start">
+                    <div class="flex-shrink-0 bg-lavender text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                        <i class="fas fa-robot text-sm"></i>
+                    </div>
+                    <div class="max-w-[80%]">
+                        <div class="bg-lavender bg-opacity-10 text-gray-800 p-3 rounded-lg rounded-tl-none">
+                            <p>Hello! I'm your NCERT AI assistant. I can help you with questions from your CBSE Class 9 and 10 textbooks. What would you like to learn today?</p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 ml-1">10:42 AM</p>
+                    </div>
+                </div>
+
+                <!-- User Message -->
+                <div class="fade-in flex items-start justify-end">
+                    <div class="max-w-[80%]">
+                        <div class="bg-green bg-opacity-20 text-gray-800 p-3 rounded-lg rounded-tr-none">
+                            <p>Can you explain Newton's Universal Law of Gravitation?</p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 mr-1 text-right">10:43 AM</p>
+                    </div>
+                    <div class="flex-shrink-0 bg-green text-white rounded-full w-8 h-8 flex items-center justify-center ml-2">
+                        <i class="fas fa-user text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- AI Thinking -->
+                <div id="thinkingIndicator" class="hidden flex items-start">
+                    <div class="flex-shrink-0 bg-lavender text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                        <i class="fas fa-robot text-sm"></i>
+                    </div>
+                    <div class="bg-lavender bg-opacity-10 text-gray-800 p-3 rounded-lg rounded-tl-none">
+                        <div class="flex items-center">
+                            <span class="thinking-dot"></span>
+                            <span class="thinking-dot"></span>
+                            <span class="thinking-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="border-t border-gray-200 p-4 bg-gray-50">
+                <div class="flex items-center">
+                    <button class="p-2 text-softblue hover:text-lavender rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="p-2 text-softblue hover:text-lavender rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-grow mx-2 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender focus:border-transparent">
+                    <button id="sendButton" class="p-2 bg-lavender text-white rounded-full hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-2">"Powered by RAG and NCERT textbook knowledge."</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const thinkingIndicator = document.getElementById('thinkingIndicator');
+            const chapterSelect = document.getElementById('chapterSelect');
+            
+            // Function to add a new message to the chat
+            function addMessage(text, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `fade-in flex items-start ${isUser ? 'justify-end' : ''}`;
+                
+                const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageDiv.innerHTML = `
+                    ${isUser ? '' : `
+                        <div class="flex-shrink-0 bg-lavender text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                            <i class="fas fa-robot text-sm"></i>
+                        </div>
+                    `}
+                    <div class="max-w-[80%]">
+                        <div class="${isUser ? 'bg-green bg-opacity-20 rounded-lg rounded-tr-none' : 'bg-lavender bg-opacity-10 rounded-lg rounded-tl-none'} text-gray-800 p-3">
+                            <p>${text}</p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 ${isUser ? 'mr-1 text-right' : 'ml-1'}">${timestamp}</p>
+                    </div>
+                    ${isUser ? `
+                        <div class="flex-shrink-0 bg-green text-white rounded-full w-8 h-8 flex items-center justify-center ml-2">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                    ` : ''}
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to simulate AI response
+            function getAIResponse(userMessage) {
+                // This is a mock response - in a real app, you'd call your API here
+                const responses = {
+                    "Can you explain Newton's Universal Law of Gravitation?": "According to NCERT Class 9 Science Chapter 10, Newton's Universal Law of Gravitation states that every object in the universe attracts every other object with a force which is proportional to the product of their masses and inversely proportional to the square of the distance between them. The force acts along the line joining the two objects.",
+                    "What is the SI unit of gravitational force?": "The SI unit of gravitational force is the Newton (N), as explained in NCERT Class 9 Science Chapter 10.",
+                    "default": "I'm sorry, I couldn't find a specific answer to that in the NCERT textbooks. Could you rephrase your question or ask about a different topic from your current chapter?"
+                };
+                
+                return responses[userMessage] || responses["default"];
+            }
+            
+            // Handle send button click
+            sendButton.addEventListener('click', function() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+                    
+                    // Show thinking indicator
+                    thinkingIndicator.classList.remove('hidden');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Simulate AI thinking delay
+                    setTimeout(function() {
+                        thinkingIndicator.classList.add('hidden');
+                        const response = getAIResponse(message);
+                        addMessage(response, false);
+                    }, 1500);
+                }
+            });
+            
+            // Handle Enter key press
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+            
+            // Update chapter badge when selection changes
+            chapterSelect.addEventListener('change', function() {
+                const selectedChapter = chapterSelect.options[chapterSelect.selectedIndex].text;
+                document.querySelector('.bg-lavender').textContent = selectedChapter;
+            });
+        });
+    </script>
+</body>
+</html>
