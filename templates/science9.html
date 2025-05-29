@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT AI - Class 9 Science Chapters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fcfcf4;
+            color: #446484;
+            background-image: url('https://i.pinimg.com/736x/27/65/a0/2765a07e935081e66d461fc940642a11.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(252, 252, 244, 0.459);
+            z-index: -1;
+        }
+        
+        .chapter-card {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .science-icon {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 5rem;
+            z-index: 0;
+        }
+        
+        .chapter-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating-icon:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .floating-icon:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        .skranji {
+            font-family: 'Skranji', cursive;
+        }
+        
+        .center-content {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Floating Science Icons (Background) -->
+    <div class="fixed top-1/4 left-10 floating-icon text-[#85ba95]">
+        <i class="fas fa-atom text-4xl"></i>
+    </div>
+    <div class="fixed top-2/3 right-20 floating-icon text-[#9384ba]">
+        <i class="fas fa-flask text-4xl"></i>
+    </div>
+    <div class="fixed bottom-1/4 left-1/3 floating-icon text-[#f16464]">
+        <i class="fas fa-dna text-4xl"></i>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 md:py-12 center-content">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="inline-block bg-white bg-opacity-80 rounded-full px-6 py-2 mb-4 shadow-sm">
+                <span class="text-[#85ba95] font-medium"><i class="fas fa-book mr-2"></i>Class 9 Science</span>
+            </div>
+            <h1 class="skranji text-5xl md:text-7xl font-bold text-white mb-12 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+                Select a Chapter
+            </h1>
+        </div>
+        
+        <!-- Chapter Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Chapter 1 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#446484] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-atom text-2xl text-[#446484]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">1. Matter in Our Surroundings</h3>
+                    <p class="text-sm text-[#9384ba]">States of matter and their properties</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 2 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#85ba95] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-filter text-2xl text-[#85ba95]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">2. Is Matter Around Us Pure?</h3>
+                    <p class="text-sm text-[#9384ba]">Mixtures, solutions, and separation techniques</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 3 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#9384ba] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-atom text-2xl text-[#9384ba]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">3. Atoms and Molecules</h3>
+                    <p class="text-sm text-[#9384ba]">Atomic theory and chemical bonding</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 4 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#f16464] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-atom text-2xl text-[#f16464]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">4. Structure of the Atom</h3>
+                    <p class="text-sm text-[#9384ba]">Subatomic particles and atomic models</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 5 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#446484] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-microscope text-2xl text-[#446484]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">5. The Fundamental Unit of Life</h3>
+                    <p class="text-sm text-[#9384ba]">Cell structure and functions</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 6 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#85ba95] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-layer-group text-2xl text-[#85ba95]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">6. Tissues</h3>
+                    <p class="text-sm text-[#9384ba]">Plant and animal tissues</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 7 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#9384ba] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-running text-2xl text-[#9384ba]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">7. Motion</h3>
+                    <p class="text-sm text-[#9384ba]">Distance, displacement, and equations</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 8 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#f16464] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-car-crash text-2xl text-[#f16464]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">8. Force and Laws of Motion</h3>
+                    <p class="text-sm text-[#9384ba]">Newton's laws and momentum</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 9 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#446484] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-meteor text-2xl text-[#446484]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">9. Gravitation</h3>
+                    <p class="text-sm text-[#9384ba]">Universal law and free fall</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 10 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#85ba95] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bolt text-2xl text-[#85ba95]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">10. Work and Energy</h3>
+                    <p class="text-sm text-[#9384ba]">Work, power, and energy forms</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 11 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#9384ba] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-volume-up text-2xl text-[#9384ba]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">11. Sound</h3>
+                    <p class="text-sm text-[#9384ba]">Waves, frequency, and applications</p>
+                </div>
+            </div>
+            
+            <!-- Chapter 12 -->
+            <div class="chapter-card rounded-2xl p-8 cursor-pointer">
+                <div class="chapter-content text-center">
+                    <div class="w-16 h-16 bg-[#f16464] bg-opacity-25 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-seedling text-2xl text-[#f16464]"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-[#446484] mb-2">12. Improvement in Food Resources</h3>
+                    <p class="text-sm text-[#9384ba]">Crop production and management</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back Button -->
+        <div class="text-center mt-12">
+            <button class="bg-white bg-opacity-60 hover:bg-opacity-80 text-[#446484] font-medium py-2 px-6 rounded-full shadow-sm transition-all duration-300">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Subjects
+            </button>
+        </div>
+    </div>
+    
+    <!-- Floating Chatbot Button -->
+    <div class="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg bg-[#f16464] hover:bg-[#e05555] transition-all duration-300">
+        <i class="fas fa-robot text-2xl"></i>
+    </div>
+    
+    <script>
+        // Chapter card click handler
+        const chapterCards = document.querySelectorAll('.chapter-card');
+        chapterCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const chapterTitle = card.querySelector('h3').textContent;
+                alert(`Opening ${chapterTitle}...`);
+                // In a real app, this would navigate to the chapter page
+            });
+        });
+        
+        // Back button click handler
+        const backButton = document.querySelector('button');
+        backButton.addEventListener('click', () => {
+            alert('Going back to subjects page...');
+            // In a real app, this would navigate back
+        });
+        
+        // Chatbot button click handler
+        const chatbotBtn = document.querySelector('.fixed.bottom-6.right-6');
+        chatbotBtn.addEventListener('click', () => {
+            alert('AI Helper: How can I assist you with Science today?');
+        });
+    </script>
+</body>
+</html>
