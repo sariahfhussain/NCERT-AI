@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT AI - Class 9 Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fcfcf4;
+            color: #446484;
+            background-image: url('https://i.pinimg.com/736x/23/58/14/235814084335a12cbc1fd9492a3f3f99.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        
+        .sidebar {
+            background-color: rgba(252, 252, 196, 0.646); /* #fcfcc4 with 85% opacity */
+            border: none;
+            transition: all 0.3s ease;
+            border-top-right-radius: 1.5rem;
+            border-bottom-right-radius: 1.5rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            backdrop-filter: blur(4px); /* subtle blur for glass effect */
+        }
+
+        .sidebar .nav-item,
+        .sidebar h1,
+        .sidebar span {
+            font-size: 1.25rem; /* Slightly bigger text */
+        }
+        
+        .nav-item:hover {
+            background-color: #9384ba;
+            color: white;
+        }
+        
+        .nav-item.active {
+            background-color: #9384ba;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .subject-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .subject-card:hover::before {
+            opacity: 1;
+        }
+        
+        .subject-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 2rem;
+        }
+        
+        .subject-card:hover .subject-icons {
+            opacity: 0.3;
+        }
+        
+        .chatbot-btn {
+            background-color: #f16464;
+            box-shadow: 0 4px 10px rgba(241, 100, 100, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(241, 100, 100, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 40;
+                display: none;
+            }
+            
+            .overlay.open {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+    <!-- Mobile menu button -->
+    <div class="md:hidden fixed top-4 left-4 z-30">
+        <button id="menuBtn" class="text-2xl text-[#446484]">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    
+    <!-- Overlay for mobile menu -->
+    <div id="overlay" class="overlay"></div>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar w-64 flex-shrink-0">
+        <div class="p-4 flex items-center justify-center">
+            <h1 class="text-2xl font-bold text-[#9384ba]">NCERT AI</h1>
+            <span class="ml-2 px-2 py-1 bg-[#85ba95] text-white text-xs rounded">Class 9</span>
+        </div>
+        
+        <nav class="mt-6">
+            <div class="nav-item active px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-home mr-3"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-book mr-3"></i>
+                <span>Subjects</span>
+            </div>
+            <div class="nav-item px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-question-circle mr-3"></i>
+                <span>Ask a Question</span>
+            </div>
+            <div class="nav-item px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-clipboard-list mr-3"></i>
+                <span>Quizzes</span>
+            </div>
+            <div class="nav-item px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-user mr-3"></i>
+                <span>Profile</span>
+            </div>
+            <div class="nav-item px-6 py-3 flex items-center cursor-pointer">
+                <i class="fas fa-sign-out-alt mr-3"></i>
+                <span>Logout</span>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+        <div class="p-6 md:p-8">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-[#446484]">Hi, <span class="text-[#9384ba]">Student!</span></h1>
+                    <p class="text-lg text-[#85ba95]">What do you want to learn today?</p>
+                </div>
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=Class+9&background=9384ba&color=fff" class="w-12 h-12 rounded-full">
+                </div>
+            </div>
+            
+            <!-- Subjects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Math Card -->
+                <div class="subject-card bg-[#446484] text-white rounded-xl p-6 cursor-pointer relative">
+                    <div class="z-10 relative">
+                        <i class="fas fa-square-root-alt text-4xl mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">Mathematics</h2>
+                        <p class="opacity-90">Explore numbers, algebra, geometry and more</p>
+                    </div>
+                    <div class="subject-icons">
+                        <span class="mx-2">+</span>
+                        <span class="mx-2">−</span>
+                        <span class="mx-2">×</span>
+                        <span class="mx-2">÷</span>
+                    </div>
+                </div>
+                
+                <!-- Science Card -->
+                <div class="subject-card bg-[#85ba95] text-white rounded-xl p-6 cursor-pointer relative">
+                    <div class="z-10 relative">
+                        <i class="fas fa-flask text-4xl mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">Science</h2>
+                        <p class="opacity-90">Discover physics, chemistry, biology and more</p>
+                    </div>
+                    <div class="subject-icons">
+                        <i class="fas fa-microscope mx-2"></i>
+                        <i class="fas fa-atom mx-2"></i>
+                        <i class="fas fa-dna mx-2"></i>
+                    </div>
+                </div>
+                
+                <!-- English Card -->
+                <div class="subject-card bg-[#9384ba] text-white rounded-xl p-6 cursor-pointer relative">
+                    <div class="z-10 relative">
+                        <i class="fas fa-book-open text-4xl mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">English</h2>
+                        <p class="opacity-90">Improve your reading, writing and communication</p>
+                    </div>
+                    <div class="subject-icons">
+                        <i class="fas fa-book mx-2"></i>
+                        <i class="fas fa-pencil-alt mx-2"></i>
+                        <i class="fas fa-comment-dots mx-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Social Science Card -->
+                <div class="subject-card bg-[#f16464] text-white rounded-xl p-6 cursor-pointer relative">
+                    <div class="z-10 relative">
+                        <i class="fas fa-globe-asia text-4xl mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">Social Science</h2>
+                        <p class="opacity-90">Learn about history, geography, civics and more</p>
+                    </div>
+                    <div class="subject-icons">
+                        <i class="fas fa-map mx-2"></i>
+                        <i class="fas fa-landmark mx-2"></i>
+                        <i class="fas fa-globe mx-2"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-[#446484] mb-4">Recent Activity</h2>
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-3 h-3 rounded-full bg-[#85ba95] mr-3"></div>
+                        <p>You completed <span class="font-medium">Algebra Basics</span> quiz with 85% score</p>
+                        <span class="ml-auto text-sm text-[#9384ba]">2 hours ago</span>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-3 h-3 rounded-full bg-[#9384ba] mr-3"></div>
+                        <p>You asked a question about <span class="font-medium">Shakespeare's sonnets</span></p>
+                        <span class="ml-auto text-sm text-[#9384ba]">Yesterday</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full bg-[#f16464] mr-3"></div>
+                        <p>You started learning <span class="font-medium">French Revolution</span> chapter</p>
+                        <span class="ml-auto text-sm text-[#9384ba]">2 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        });
+        
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+        
+        // Nav item active state
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Close mobile menu after selection
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('open');
+                }
+            });
+        });
+        
+        // Subject card click handler
+        const subjectCards = document.querySelectorAll('.subject-card');
+        subjectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const subject = card.querySelector('h2').textContent;
+                alert(`Opening ${subject} page...`);
+                // In a real app, this would navigate to the subject page
+            });
+        });
+        
+        // Chatbot button click handler
+        const chatbotBtn = document.querySelector('.chatbot-btn');
+        chatbotBtn.addEventListener('click', () => {
+            alert('AI Helper: How can I help you today?');
+        });
+    </script>
+</body>
+</html>
