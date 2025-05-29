@@ -6,10 +6,8 @@
     <title>NCERT AI - Class 9 Science Chapters</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap');
         
         body {
             font-family: 'Poppins', sans-serif;
@@ -77,17 +75,6 @@
         .floating-icon:nth-child(3) {
             animation-delay: 1s;
         }
-        
-        .skranji {
-            font-family: 'Skranji', cursive;
-        }
-        
-        .center-content {
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -103,19 +90,20 @@
     </div>
     
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8 md:py-12 center-content">
+    <div class="container mx-auto px-4 py-8 md:py-12">
         <!-- Header -->
-        <div class="text-center mb-16">
+        <div class="text-center mb-12">
             <div class="inline-block bg-white bg-opacity-80 rounded-full px-6 py-2 mb-4 shadow-sm">
                 <span class="text-[#85ba95] font-medium"><i class="fas fa-book mr-2"></i>Class 9 Science</span>
             </div>
-            <h1 class="skranji text-5xl md:text-7xl font-bold text-white mb-12 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
                 Select a Chapter
             </h1>
+            
         </div>
         
         <!-- Chapter Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             <!-- Chapter 1 -->
             <div class="chapter-card rounded-2xl p-8 cursor-pointer">
                 <div class="chapter-content text-center">
@@ -257,10 +245,7 @@
         </div>
     </div>
     
-    <!-- Floating Chatbot Button -->
-    <div class="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg bg-[#f16464] hover:bg-[#e05555] transition-all duration-300">
-        <i class="fas fa-robot text-2xl"></i>
-    </div>
+
     
     <script>
         // Chapter card click handler
@@ -280,11 +265,6 @@
             // In a real app, this would navigate back
         });
         
-        // Chatbot button click handler
-        const chatbotBtn = document.querySelector('.fixed.bottom-6.right-6');
-        chatbotBtn.addEventListener('click', () => {
-            alert('AI Helper: How can I assist you with Science today?');
-        });
     </script>
 </body>
 </html>
