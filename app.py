@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
+from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import os
+import requests
 from utils.pdf_processor import PDFProcessor
 from utils.rag_utils import RAGSystem
 from dotenv import load_dotenv
-from transformers import pipeline
 
 # Load environment variables
 load_dotenv()
@@ -26,19 +27,13 @@ mail = Mail(app)
 # RAG and LLM setup
 pdf_processor = PDFProcessor()
 rag_system = RAGSystem()
-qa_pipeline = pipeline(
-    "text-generation",
-    model="google/flan-t5-small",
-    device=-1  # CPU only
-)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
+    password = db.Column(db.String(200))  # Hashed
     is_verified = db.Column(db.Boolean, default=False)
-    # Add class_selected if you want class 9/10 logic
 
 @app.before_first_request
 def initialize_rag():
@@ -63,11 +58,20 @@ def signup():
         flash('Email already registered.')
         return redirect(url_for('home'))
     otp = str(random.randint(100000, 999999))
-    session['signup_data'] = {'name': name, 'email': email, 'password': password, 'otp': otp}
+    session['signup_data'] = {
+        'name': name,
+        'email': email,
+        'password': generate_password_hash(password),
+        'otp': otp
+    }
     # Send OTP
     msg = Message('Your OTP for NCERT AI', sender=app.config['MAIL_USERNAME'], recipients=[email])
     msg.body = f'Your OTP is {otp}'
-    mail.send(msg)
+    try:
+        mail.send(msg)
+    except Exception as e:
+        flash('Failed to send OTP email. Please try again.')
+        return redirect(url_for('home'))
     return render_template('otp.html')
 
 @app.route('/verify_otp', methods=['POST'])
@@ -75,7 +79,12 @@ def verify_otp():
     user_otp = request.form['otp']
     data = session.get('signup_data')
     if data and user_otp == data['otp']:
-        user = User(name=data['name'], email=data['email'], password=data['password'], is_verified=True)
+        user = User(
+            name=data['name'],
+            email=data['email'],
+            password=data['password'],
+            is_verified=True
+        )
         db.session.add(user)
         db.session.commit()
         session.pop('signup_data', None)
@@ -98,11 +107,11 @@ def dashboard():
 def login():
     email = request.form['email']
     password = request.form['password']
-    user = User.query.filter_by(email=email, password=password, is_verified=True).first()
-    if user:
+    user = User.query.filter_by(email=email, is_verified=True).first()
+    if user and check_password_hash(user.password, password):
         session['user_id'] = user.id
         flash('Logged in successfully!')
-        return redirect(url_for('dashboard'))  # Redirect to dashboard
+        return redirect(url_for('dashboard'))
     else:
         flash('Invalid credentials or email not verified.')
         return redirect(url_for('home'))
@@ -116,6 +125,23 @@ def logout():
 @app.route('/science9')
 def science9():
     return render_template('science9.html')
+
+# --- LLM Integration using Ollama (local, free) ---
+def ollama_generate(prompt, model="phi3"):
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                "model": model,
+                "prompt": prompt,
+                "stream": False
+            },
+            timeout=60
+        )
+        result = response.json()
+        return result.get("response", "Sorry, I couldn't generate an answer.")
+    except Exception as e:
+        return "Sorry, there was an error connecting to the LLM."
 
 @app.route('/ask', methods=['POST'])
 def ask_question():
@@ -142,7 +168,7 @@ def ask_question():
             "sources": []
         })
 
-    # Generate answer using lightweight LLM
+    # Compose context for LLM
     context = "\n".join([f"Source {i+1}: {res['text']}" for i, res in enumerate(results)])
     prompt = f"""Answer this question based on the NCERT textbook context:
 
@@ -153,12 +179,7 @@ Context:
 
 Answer in simple language suitable for a 9th grade student:"""
 
-    answer = qa_pipeline(
-        prompt,
-        max_length=200,
-        do_sample=True,
-        temperature=0.3
-    )[0]['generated_text']
+    answer = ollama_generate(prompt)
 
     return jsonify({
         "answer": answer,
