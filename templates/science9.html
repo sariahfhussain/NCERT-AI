@@ -252,19 +252,17 @@
         const chapterCards = document.querySelectorAll('.chapter-card');
         chapterCards.forEach(card => {
             card.addEventListener('click', () => {
-                const chapterTitle = card.querySelector('h3').textContent;
-                alert(`Opening ${chapterTitle}...`);
-                // In a real app, this would navigate to the chapter page
+                // Redirect to chatbot page for any chapter
+                window.location.href = "/chat";
             });
         });
-        
+
         // Back button click handler
         const backButton = document.querySelector('button');
         backButton.addEventListener('click', () => {
             alert('Going back to subjects page...');
             // In a real app, this would navigate back
         });
-        
     </script>
 </body>
 </html>
