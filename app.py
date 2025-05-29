@@ -59,6 +59,15 @@ def verify_otp():
         flash('Invalid OTP. Try again.')
         return render_template('otp.html')
 
+@app.route('/dashboard')
+def dashboard():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Please log in first.')
+        return redirect(url_for('home'))
+    user = User.query.get(user_id)
+    return render_template('class9-dashboard.html', user_name=user.name)
+
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
@@ -67,7 +76,7 @@ def login():
     if user:
         session['user_id'] = user.id
         flash('Logged in successfully!')
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))  # Redirect to dashboard
     else:
         flash('Invalid credentials or email not verified.')
         return redirect(url_for('home'))
@@ -78,8 +87,11 @@ def logout():
     flash('Logged out.')
     return redirect(url_for('home'))
 
+@app.route('/science9')
+def science9():
+    return render_template('science9.html')
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-

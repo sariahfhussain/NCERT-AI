@@ -185,7 +185,9 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-[#446484]">Hi, <span class="text-[#9384ba]">Student!</span></h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-[#446484]">
+                        Hi, <span class="text-[#9384ba]">{{ user_name }}!</span>
+                    </h1>
                     <p class="text-lg text-[#85ba95]">What do you want to learn today?</p>
                 </div>
                 <div class="flex items-center">
@@ -312,9 +314,13 @@
         const subjectCards = document.querySelectorAll('.subject-card');
         subjectCards.forEach(card => {
             card.addEventListener('click', () => {
-                const subject = card.querySelector('h2').textContent;
-                alert(`Opening ${subject} page...`);
-                // In a real app, this would navigate to the subject page
+                const subject = card.querySelector('h2').textContent.trim();
+                if (subject === "Science") {
+                    window.location.href = "/science9";
+                } else {
+                    alert(`Opening ${subject} page...`);
+                    // In a real app, this would navigate to the subject page
+                }
             });
         });
         
