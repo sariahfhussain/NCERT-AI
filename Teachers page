@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .auth-container {
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #FFB088 0%, #F27D52 100%);
+        }
+        .auth-card {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 25px rgba(211, 95, 56, 0.15);
+        }
+        .tab-active {
+            color: #E26D44;
+            border-bottom: 2px solid #E26D44;
+        }
+        .btn-primary {
+            background-image: linear-gradient(135deg, #FFB088 0%, #F27D52 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(211, 95, 56, 0.2);
+        }
+        .class-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .class-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(211, 95, 56, 0.1), 0 4px 6px -2px rgba(211, 95, 56, 0.05);
+        }
+        .material-card {
+            transition: all 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(211, 95, 56, 0.1), 0 4px 6px -2px rgba(211, 95, 56, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="authPage" class="auth-container flex items-center justify-center p-4">
+        <div class="auth-card w-full max-w-md rounded-xl overflow-hidden">
+            <div class="p-8">
+                <!-- Logo and Title -->
+                <div class="text-center mb-8">
+                    <div class="flex justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-orange-800 mt-2">Classroom Management</h1>
+                    <p class="text-orange-600">Login to access your classrooms</p>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your username" required>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your password" required>
+                    </div>
+                    <div id="loginError" class="text-red-500 text-sm hidden">
+                        Invalid username or password. Please try again.
+                    </div>
+                    <div>
+                        <button type="submit" class="btn-primary w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-white font-medium focus:outline-none">
+                            Login
+                        </button>
+                    </div>
+                    <div class="text-center text-sm text-gray-600">
+                        <p>Demo credentials: username: <strong>demo</strong>, password: <strong>password</strong></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page (Initially Hidden) -->
+    <div id="dashboardPage" class="min-h-screen bg-gray-100 hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <h1 class="ml-2 text-xl font-semibold text-gray-800">Classroom Management</h1>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <button id="userProfileBtn" class="flex items-center focus:outline-none">
+                            <div id="userInitials" class="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium">
+                                DU
+                            </div>
+                            <span id="userName" class="ml-2 text-gray-700">Demo User</span>
+                        </button>
+                        <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Classrooms</h2>
+                <div id="classroomsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="class-card bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg shadow-md p-5 text-white" data-classroom-id="math101">
+                        <h3 class="text-lg font-semibold mb-2">Mathematics 101</h3>
+                        <p class="text-orange-100 mb-3">12 students</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-orange-200 text-orange-800 py-1 px-2 rounded-full">Active</span>
+                        </div>
+                    </div>
+                    <div class="class-card bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg shadow-md p-5 text-white" data-classroom-id="science202">
+                        <h3 class="text-lg font-semibold mb-2">Science 202</h3>
+                        <p class="text-blue-100 mb-3">8 students</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-blue-200 text-blue-800 py-1 px-2 rounded-full">Active</span>
+                        </div>
+                    </div>
+                    <div class="class-card bg-gradient-to-r from-green-400 to-green-500 rounded-lg shadow-md p-5 text-white" data-classroom-id="history303">
+                        <h3 class="text-lg font-semibold mb-2">History 303</h3>
+                        <p class="text-green-100 mb-3">15 students</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-green-200 text-green-800 py-1 px-2 rounded-full">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Classroom Detail Page (Initially Hidden) -->
+    <div id="classroomDetailPage" class="min-h-screen bg-gray-100 hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <button id="backToDashboardBtn" class="mr-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </button>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <h1 class="ml-2 text-xl font-semibold text-gray-800">Classroom Management</h1>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <button id="userProfileBtnDetail" class="flex items-center focus:outline-none">
+                            <div id="userInitialsDetail" class="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium">
+                                DU
+                            </div>
+                            <span id="userNameDetail" class="ml-2 text-gray-700">Demo User</span>
+                        </button>
+                        <div id="userDropdownDetail" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                            <a href="#" id="logoutBtnDetail" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Classroom Header -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h2 id="classroomTitle" class="text-2xl font-bold text-gray-800 mb-2">Mathematics 101</h2>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                            </svg>
+                            <span id="studentCount">12 students</span>
+                        </div>
+                    </div>
+                    <button id="addMaterialBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md flex items-center transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        Add Material
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Materials Section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Course Materials</h3>
+                    <div class="relative">
+                        <select id="materialFilter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-sm">
+                            <option value="all">All Materials</option>
+                            <option value="document">Documents</option>
+                            <option value="video">Videos</option>
+                            <option value="quiz">Quizzes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="materialsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Document Material -->
+                    <div class="material-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div class="bg-orange-100 p-3 rounded-lg mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-lg font-medium text-gray-800">Algebra Basics</h4>
+                                        <span class="bg-orange-100 text-orange-800 text-xs px-2 py-0.5 rounded-full">PDF</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">Introduction to algebraic expressions and equations</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Added: May 15, 2023</span>
+                            <button class="p-1 text-gray-500 hover:text-orange-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Material -->
+                    <div class="material-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-lg mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-lg font-medium text-gray-800">Solving Equations</h4>
+                                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">VIDEO</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">Step-by-step guide to solving linear equations</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Added: June 2, 2023</span>
+                            <button class="p-1 text-gray-500 hover:text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Material -->
+                    <div class="material-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div class="bg-green-100 p-3 rounded-lg mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="text-lg font-medium text-gray-800">Algebra Quiz</h4>
+                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">QUIZ</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">Test your knowledge of algebraic concepts</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Added: June 10, 2023</span>
+                            <button class="p-1 text-gray-500 hover:text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Add Material Modal -->
+        <div id="addMaterialModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Add New Material</h3>
+                        <button id="closeMaterialModalBtn" class="text-gray-400 hover:text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="addMaterialForm">
+                        <div class="mb-4">
+                            <label for="materialTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input type="text" id="materialTitle" name="materialTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter material title" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="materialDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <textarea id="materialDescription" name="materialDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter material description"></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="materialType" class="block text-sm font-medium text-gray-700 mb-1">Material Type</label>
+                            <select id="materialType" name="materialType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white" required>
+                                <option value="" disabled selected>Select material type</option>
+                                <option value="document">Document</option>
+                                <option value="video">Video</option>
+                                <option value="quiz">Quiz</option>
+                                <option value="assignment">Assignment</option>
+                            </select>
+                        </div>
+                        
+                        <div id="fileUploadSection" class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Upload File</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-md p-4 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <p class="mt-1 text-sm text-gray-600">Drag and drop your file here, or click to browse</p>
+                                <input type="file" id="fileUpload" class="hidden">
+                                <button type="button" id="browseBtn" class="mt-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm">Browse Files</button>
+                            </div>
+                            <p id="selectedFileName" class="mt-2 text-sm text-gray-600 hidden"></p>
+                        </div>
+                        
+                        <div class="flex justify-end mt-6">
+                            <button type="button" id="cancelMaterialBtn" class="px-4 py-2 text-gray-600 hover:text-gray-800 mr-2">Cancel</button>
+                            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md">Add Material</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User data
+        const users = [
+            { username: 'demo', password: 'password', name: 'Demo User' },
+            { username: 'teacher', password: 'teacher123', name: 'Teacher Account' },
+            { username: 'admin', password: 'admin123', name: 'Admin User' }
+        ];
+        
+        // Classroom data
+        const classrooms = {
+            math101: {
+                id: "math101",
+                name: "Mathematics 101",
+                students: 12,
+                materials: [
+                    {
+                        id: "m1",
+                        title: "Algebra Basics",
+                        description: "Introduction to algebraic expressions and equations",
+                        type: "document",
+                        fileType: "PDF",
+                        dateAdded: "May 15, 2023"
+                    },
+                    {
+                        id: "m2",
+                        title: "Solving Equations",
+                        description: "Step-by-step guide to solving linear equations",
+                        type: "video",
+                        fileType: "VIDEO",
+                        dateAdded: "June 2, 2023"
+                    },
+                    {
+                        id: "m3",
+                        title: "Algebra Quiz",
+                        description: "Test your knowledge of algebraic concepts",
+                        type: "quiz",
+                        fileType: "QUIZ",
+                        dateAdded: "June 10, 2023"
+                    }
+                ]
+            },
+            science202: {
+                id: "science202",
+                name: "Science 202",
+                students: 8,
+                materials: [
+                    {
+                        id: "s1",
+                        title: "Chemistry Fundamentals",
+                        description: "Basic principles of chemistry",
+                        type: "document",
+                        fileType: "PDF",
+                        dateAdded: "April 5, 2023"
+                    },
+                    {
+                        id: "s2",
+                        title: "Lab Safety",
+                        description: "Important safety guidelines for lab work",
+                        type: "video",
+                        fileType: "VIDEO",
+                        dateAdded: "April 12, 2023"
+                    }
+                ]
+            },
+            history303: {
+                id: "history303",
+                name: "History 303",
+                students: 15,
+                materials: [
+                    {
+                        id: "h1",
+                        title: "World War II Overview",
+                        description: "Comprehensive overview of WWII events",
+                        type: "document",
+                        fileType: "PDF",
+                        dateAdded: "March 10, 2023"
+                    },
+                    {
+                        id: "h2",
+                        title: "Ancient Civilizations",
+                        description: "Study of early human societies",
+                        type: "document",
+                        fileType: "DOCX",
+                        dateAdded: "March 22, 2023"
+                    }
+                ]
+            }
+        };
+        
+        // DOM Elements
+        const authPage = document.getElementById('authPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const classroomDetailPage = document.getElementById('classroomDetailPage');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const userDropdown = document.getElementById('userDropdown');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInitials = document.getElementById('userInitials');
+        const userName = document.getElementById('userName');
+        const classroomsList = document.getElementById('classroomsList');
+        const backToDashboardBtn = document.getElementById('backToDashboardBtn');
+        const classroomTitle = document.getElementById('classroomTitle');
+        const studentCount = document.getElementById('studentCount');
+        const materialsList = document.getElementById('materialsList');
+        const materialFilter = document.getElementById('materialFilter');
+        const addMaterialBtn = document.getElementById('addMaterialBtn');
+        const addMaterialModal = document.getElementById('addMaterialModal');
+        const closeMaterialModalBtn = document.getElementById('closeMaterialModalBtn');
+        const cancelMaterialBtn = document.getElementById('cancelMaterialBtn');
+        const addMaterialForm = document.getElementById('addMaterialForm');
+        const materialType = document.getElementById('materialType');
+        const browseBtn = document.getElementById('browseBtn');
+        const fileUpload = document.getElementById('fileUpload');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const userProfileBtnDetail = document.getElementById('userProfileBtnDetail');
+        const userDropdownDetail = document.getElementById('userDropdownDetail');
+        const logoutBtnDetail = document.getElementById('logoutBtnDetail');
+        const userInitialsDetail = document.getElementById('userInitialsDetail');
+        const userNameDetail = document.getElementById('userNameDetail');
+        
+        // Current state
+        let currentUser = null;
+        let currentClassroom = null;
+        
+        // Login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Find user
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                // Login successful
+                currentUser = user;
+                loginError.classList.add('hidden');
+                showDashboard();
+            } else {
+                // Login failed
+                loginError.classList.remove('hidden');
+            }
+        });
+        
+        // Show dashboard
+        function showDashboard() {
+            authPage.classList.add('hidden');
+            classroomDetailPage.classList.add('hidden');
+            dashboardPage.classList.remove('hidden');
+            
+            // Update user info
+            updateUserInfo();
+            
+            // Set up classroom cards
+            setupClassroomCards();
+        }
+        
+        // Update user information
+        function updateUserInfo() {
+            if (currentUser) {
+                // Get initials from name
+                const nameParts = currentUser.name.split(' ');
+                const initials = nameParts.length > 1 
+                    ? `${nameParts[0][0]}${nameParts[1][0]}`
+                    : nameParts[0].substring(0, 2);
+                
+                userInitials.textContent = initials.toUpperCase();
+                userName.textContent = currentUser.name;
+                
+                // Also update detail page
+                userInitialsDetail.textContent = initials.toUpperCase();
+                userNameDetail.textContent = currentUser.name;
+            }
+        }
+        
+        // Set up classroom cards with click events
+        function setupClassroomCards() {
+            const classCards = document.querySelectorAll('.class-card');
+            classCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const classroomId = this.getAttribute('data-classroom-id');
+                    openClassroomDetail(classroomId);
+                });
+            });
+        }
+        
+        // Open classroom detail page
+        function openClassroomDetail(classroomId) {
+            currentClassroom = classrooms[classroomId];
+            
+            if (currentClassroom) {
+                // Update classroom details
+                classroomTitle.textContent = currentClassroom.name;
+                studentCount.textContent = `${currentClassroom.students} students`;
+                
+                // Load materials
+                loadMaterials();
+                
+                // Show classroom detail page
+                dashboardPage.classList.add('hidden');
+                classroomDetailPage.classList.remove('hidden');
+            }
+        }
+        
+        // Load materials for current classroom
+        function loadMaterials(filterType = 'all') {
+            if (!currentClassroom) return;
+            
+            // Clear materials list
+            materialsList.innerHTML = '';
+            
+            // Filter materials if needed
+            const materials = filterType === 'all' 
+                ? currentClassroom.materials 
+                : currentClassroom.materials.filter(m => m.type === filterType);
+            
+            // Add materials to the list
+            materials.forEach(material => {
+                const materialCard = createMaterialCard(material);
+                materialsList.appendChild(materialCard);
+            });
+        }
+        
+        // Create material card element
+        function createMaterialCard(material) {
+            // Set colors based on material type
+            let iconBgColor, iconColor, badgeBgColor, badgeTextColor;
+            
+            switch(material.type) {
+                case 'document':
+                    iconBgColor = 'bg-orange-100';
+                    iconColor = 'text-orange-600';
+                    badgeBgColor = 'bg-orange-100';
+                    badgeTextColor = 'text-orange-800';
+                    break;
+                case 'video':
+                    iconBgColor = 'bg-blue-100';
+                    iconColor = 'text-blue-600';
+                    badgeBgColor = 'bg-blue-100';
+                    badgeTextColor = 'text-blue-800';
+                    break;
+                case 'quiz':
+                    iconBgColor = 'bg-green-100';
+                    iconColor = 'text-green-600';
+                    badgeBgColor = 'bg-green-100';
+                    badgeTextColor = 'text-green-800';
+                    break;
+                default:
+                    iconBgColor = 'bg-gray-100';
+                    iconColor = 'text-gray-600';
+                    badgeBgColor = 'bg-gray-100';
+                    badgeTextColor = 'text-gray-800';
+            }
+            
+            // Create material card element
+            const card = document.createElement('div');
+            card.className = 'material-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden';
+            
+            // Set icon based on material type
+            let icon;
+            switch(material.type) {
+                case 'document':
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>`;
+                    break;
+                case 'video':
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>`;
+                    break;
+                case 'quiz':
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>`;
+                    break;
+                default:
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>`;
+            }
+            
+            // Set action button based on material type
+            let actionButton;
+            switch(material.type) {
+                case 'document':
+                    actionButton = `<button class="p-1 text-gray-500 hover:text-orange-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>`;
+                    break;
+                case 'video':
+                    actionButton = `<button class="p-1 text-gray-500 hover:text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                        </svg>
+                    </button>`;
+                    break;
+                case 'quiz':
+                    actionButton = `<button class="p-1 text-gray-500 hover:text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+                        </svg>
+                    </button>`;
+                    break;
+                default:
+                    actionButton = `<button class="p-1 text-gray-500 hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>`;
+            }
+            
+            card.innerHTML = `
+                <div class="p-4">
+                    <div class="flex items-start">
+                        <div class="${iconBgColor} p-3 rounded-lg mr-3">
+                            ${icon}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-lg font-medium text-gray-800">${material.title}</h4>
+                                <span class="${badgeBgColor} ${badgeTextColor} text-xs px-2 py-0.5 rounded-full">${material.fileType}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">${material.description}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Added: ${material.dateAdded}</span>
+                    ${actionButton}
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Filter materials
+        materialFilter.addEventListener('change', function() {
+            loadMaterials(this.value);
+        });
+        
+        // Add Material Modal
+        addMaterialBtn.addEventListener('click', function() {
+            addMaterialModal.classList.remove('hidden');
+        });
+        
+        closeMaterialModalBtn.addEventListener('click', function() {
+            addMaterialModal.classList.add('hidden');
+        });
+        
+        cancelMaterialBtn.addEventListener('click', function() {
+            addMaterialModal.classList.add('hidden');
+        });
+        
+        // File upload
+        browseBtn.addEventListener('click', function() {
+            fileUpload.click();
+        });
+        
+        fileUpload.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                selectedFileName.textContent = `Selected file: ${fileName}`;
+                selectedFileName.classList.remove('hidden');
+            }
+        });
+        
+        // Add new material
+        addMaterialForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('materialTitle').value;
+            const description = document.getElementById('materialDescription').value;
+            const type = materialType.value;
+            
+            if (!title || !type) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Create new material
+            const newMaterial = {
+                id: `new-${Date.now()}`,
+                title: title,
+                description: description,
+                type: type,
+                fileType: getFileTypeFromMaterialType(type),
+                dateAdded: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+            
+            // Add to current classroom
+            if (currentClassroom) {
+                currentClassroom.materials.unshift(newMaterial);
+                
+                // Reload materials
+                loadMaterials(materialFilter.value);
+                
+                // Close modal
+                addMaterialModal.classList.add('hidden');
+                
+                // Reset form
+                addMaterialForm.reset();
+                selectedFileName.classList.add('hidden');
+                
+                // Show success message
+                showNotification('Material added successfully!');
+            }
+        });
+        
+        // Get file type from material type
+        function getFileTypeFromMaterialType(type) {
+            switch(type) {
+                case 'document': return 'PDF';
+                case 'video': return 'VIDEO';
+                case 'quiz': return 'QUIZ';
+                case 'assignment': return 'DOCX';
+                default: return 'FILE';
+            }
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Back to dashboard
+        backToDashboardBtn.addEventListener('click', function() {
+            showDashboard();
+        });
+        
+        // User dropdown
+        userProfileBtn.addEventListener('click', function() {
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        userProfileBtnDetail.addEventListener('click', function() {
+            userDropdownDetail.classList.toggle('hidden');
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userProfileBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+            
+            if (!userProfileBtnDetail.contains(e.target) && !userDropdownDetail.contains(e.target)) {
+                userDropdownDetail.classList.add('hidden');
+            }
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            logout();
+        });
+        
+        logoutBtnDetail.addEventListener('click', function() {
+            logout();
+        });
+        
+        function logout() {
+            currentUser = null;
+            currentClassroom = null;
+            
+            // Reset forms
+            loginForm.reset();
+            loginError.classList.add('hidden');
+            
+            // Show auth page
+            dashboardPage.classList.add('hidden');
+            classroomDetailPage.classList.add('hidden');
+            authPage.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
