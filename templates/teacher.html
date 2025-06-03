@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT AI - Smart Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f5ff;
+        }
+        .auth-container {
+            background: linear-gradient(135deg, #f0e7ff 0%, #e2d5ff 100%);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-2px);
+        }
+        .subject-card {
+            background: #ffffff;
+            transition: all 0.3s ease;
+            border-left: 4px solid #8b5cf6;
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .material-card {
+            background: #ffffff;
+            border-left: 4px solid #8b5cf6;
+            transition: all 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        }
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .modal-content {
+            background: #ffffff;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        .class-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown-item {
+            transition: all 0.2s ease;
+        }
+        .dropdown-item:hover {
+            background-color: #f3f0ff;
+        }
+        .logo-text {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app" class="min-h-screen flex flex-col">
+        <!-- Login Page -->
+        <div id="loginPage" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-violet-50 to-indigo-50">
+            <div class="auth-container rounded-xl p-8 w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold logo-text">NCERT AI</h1>
+                    <p class="text-violet-700 mt-2">Smart Learning Platform</p>
+                </div>
+                
+                <div class="flex mb-6">
+                    <button id="loginTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-violet-600 text-violet-800">Login</button>
+                    <button id="signupTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-gray-300 text-gray-500">Sign Up</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="loginName" class="block text-sm font-medium text-violet-800 mb-1">Name</label>
+                        <input type="text" id="loginName" value="teacher" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                        <p class="text-xs text-violet-600 mt-1">Demo username: teacher</p>
+                    </div>
+                    <div>
+                        <label for="loginPassword" class="block text-sm font-medium text-violet-800 mb-1">Password</label>
+                        <input type="password" id="loginPassword" value="ncert123" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                        <p class="text-xs text-violet-600 mt-1">Demo password: ncert123</p>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Login</button>
+                </form>
+                
+                <!-- Signup Form (Hidden by default) -->
+                <form id="signupForm" class="space-y-4 hidden">
+                    <div>
+                        <label for="signupName" class="block text-sm font-medium text-violet-800 mb-1">Name</label>
+                        <input type="text" id="signupName" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                    </div>
+                    <div>
+                        <label for="signupEmail" class="block text-sm font-medium text-violet-800 mb-1">Email</label>
+                        <input type="email" id="signupEmail" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                    </div>
+                    <div>
+                        <label for="signupPassword" class="block text-sm font-medium text-violet-800 mb-1">Password</label>
+                        <input type="password" id="signupPassword" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                    </div>
+                    <div>
+                        <label for="signupClass" class="block text-sm font-medium text-violet-800 mb-1">Class</label>
+                        <select id="signupClass" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                            <option value="">Select Class</option>
+                            <option value="class1">Class 1</option>
+                            <option value="class2">Class 2</option>
+                            <option value="class3">Class 3</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Sign Up</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Page (Hidden by default) -->
+        <div id="dashboardPage" class="min-h-screen flex flex-col hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-md border-b border-violet-100">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
+                        <div id="classDropdownContainer" class="relative">
+                            <button id="classDropdownBtn" class="bg-violet-100 text-violet-700 px-4 py-1 rounded-md text-sm font-medium flex items-center">
+                                <span id="classDisplay">Class 1</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div id="classDropdown" class="class-dropdown bg-white py-2 hidden">
+                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class1">Class 1</div>
+                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class2">Class 2</div>
+                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class3">Class 3</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="userNameDisplay" class="font-medium text-violet-800"></span>
+                        <button id="logoutBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-4 py-1 rounded-md text-sm font-medium transition">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-grow container mx-auto px-4 py-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-violet-800">Available Subjects</h2>
+                    <div class="text-sm text-violet-600 bg-violet-50 px-3 py-1 rounded-md">
+                        Showing subjects with materials
+                    </div>
+                </div>
+                
+                <div id="noSubjectsMessage" class="hidden text-center py-12 bg-white rounded-lg shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <p class="text-violet-700 mt-4">No subjects with materials available for this class.</p>
+                </div>
+                
+                <div id="subjectsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Subject cards will be dynamically inserted here -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Subject Materials Page (Hidden by default) -->
+        <div id="materialsPage" class="min-h-screen flex flex-col hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-md border-b border-violet-100">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <button id="backToSubjectsBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-3 py-1 rounded-md text-sm font-medium transition flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back
+                        </button>
+                        <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
+                        <div id="subjectDisplay" class="bg-violet-100 text-violet-700 px-3 py-1 rounded-md text-sm font-medium"></div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="addMaterialBtn" class="bg-violet-600 text-white hover:bg-violet-700 px-4 py-1 rounded-md text-sm font-medium transition flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Add Material
+                        </button>
+                        <button id="logoutFromMaterialsBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-4 py-1 rounded-md text-sm font-medium transition">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-grow container mx-auto px-4 py-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-violet-800">Course Materials</h2>
+                    <div class="text-sm text-violet-600 bg-violet-50 px-3 py-1 rounded-md" id="materialCountDisplay">
+                        0 materials
+                    </div>
+                </div>
+                
+                <div id="materialsContainer" class="space-y-4">
+                    <!-- Material cards will be dynamically inserted here -->
+                </div>
+                
+                <div id="emptyMaterials" class="hidden text-center py-12 bg-white rounded-lg shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <p class="text-violet-700 mt-4">No materials available yet. Click "Add Material" to get started.</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Add Material Modal (Hidden by default) -->
+        <div id="addMaterialModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+            <div class="modal-overlay absolute inset-0"></div>
+            <div class="modal-content rounded-lg p-6 w-full max-w-md relative">
+                <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <h3 class="text-xl font-bold text-violet-800 mb-4">Add New Material</h3>
+                
+                <form id="addMaterialForm" class="space-y-4">
+                    <div>
+                        <label for="materialTitle" class="block text-sm font-medium text-violet-800 mb-1">Title</label>
+                        <input type="text" id="materialTitle" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
+                    </div>
+                    <div>
+                        <label for="materialDocument" class="block text-sm font-medium text-violet-800 mb-1">Upload Document</label>
+                        <div class="border-2 border-dashed border-violet-300 rounded-md p-4 text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="text-sm text-violet-700 mt-2">Click to upload or drag and drop</p>
+                            <p class="text-xs text-violet-600 mt-1">PDF, DOC, PPT, or other document formats</p>
+                            <input type="file" id="materialDocument" class="hidden">
+                            <button type="button" id="browseFilesBtn" class="mt-2 text-sm text-violet-600 underline">Browse files</button>
+                            <p id="selectedFileName" class="mt-2 text-sm text-violet-700 hidden"></p>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Add Material</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const classSubjects = {
+            'class1': ['Mathematics', 'Science', 'English', 'Social Studies'],
+            'class2': ['Mathematics', 'Science', 'English', 'Social Studies'],
+            'class3': ['Mathematics', 'Science', 'English', 'Social Studies']
+        };
+        
+        const subjectIcons = {
+            'Mathematics': '📐',
+            'Science': '🔬',
+            'English': '📚',
+            'Social Studies': '🌍'
+        };
+        
+        const subjectColors = {
+            'Mathematics': 'border-blue-400',
+            'Science': 'border-green-400',
+            'English': 'border-purple-400',
+            'Social Studies': 'border-yellow-400'
+        };
+        
+        // Store materials data
+        let materials = {
+            'class1': {
+                'Mathematics': [
+                    { id: 1, title: 'Introduction to Numbers', filename: 'numbers.pdf', date: '2023-10-15' },
+                    { id: 2, title: 'Basic Addition', filename: 'addition.pdf', date: '2023-10-18' }
+                ],
+                'Science': [
+                    { id: 3, title: 'Plants and Animals', filename: 'plants.pdf', date: '2023-10-12' }
+                ],
+                'English': [],
+                'Social Studies': []
+            },
+            'class2': {
+                'Mathematics': [
+                    { id: 4, title: 'Multiplication Tables', filename: 'multiplication.pdf', date: '2023-10-10' }
+                ],
+                'Science': [],
+                'English': [
+                    { id: 5, title: 'Basic Grammar', filename: 'grammar.pdf', date: '2023-10-05' }
+                ],
+                'Social Studies': []
+            },
+            'class3': {
+                'Mathematics': [],
+                'Science': [
+                    { id: 6, title: 'Human Body', filename: 'body.pdf', date: '2023-10-01' }
+                ],
+                'English': [],
+                'Social Studies': [
+                    { id: 7, title: 'Our Community', filename: 'community.pdf', date: '2023-09-28' }
+                ]
+            }
+        };
+        
+        // Demo credentials
+        const demoCredentials = {
+            username: 'teacher',
+            password: 'ncert123'
+        };
+        
+        // Current user data
+        let currentUser = null;
+        let currentClass = null;
+        let currentSubject = null;
+        
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const materialsPage = document.getElementById('materialsPage');
+        const loginTabBtn = document.getElementById('loginTabBtn');
+        const signupTabBtn = document.getElementById('signupTabBtn');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const subjectsContainer = document.getElementById('subjectsContainer');
+        const noSubjectsMessage = document.getElementById('noSubjectsMessage');
+        const materialsContainer = document.getElementById('materialsContainer');
+        const emptyMaterials = document.getElementById('emptyMaterials');
+        const classDisplay = document.getElementById('classDisplay');
+        const classDropdownBtn = document.getElementById('classDropdownBtn');
+        const classDropdown = document.getElementById('classDropdown');
+        const subjectDisplay = document.getElementById('subjectDisplay');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const materialCountDisplay = document.getElementById('materialCountDisplay');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutFromMaterialsBtn = document.getElementById('logoutFromMaterialsBtn');
+        const backToSubjectsBtn = document.getElementById('backToSubjectsBtn');
+        const addMaterialBtn = document.getElementById('addMaterialBtn');
+        const addMaterialModal = document.getElementById('addMaterialModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const addMaterialForm = document.getElementById('addMaterialForm');
+        const browseFilesBtn = document.getElementById('browseFilesBtn');
+        const materialDocument = document.getElementById('materialDocument');
+        const selectedFileName = document.getElementById('selectedFileName');
+        
+        // Tab switching
+        loginTabBtn.addEventListener('click', () => {
+            loginTabBtn.classList.add('border-violet-600', 'text-violet-800');
+            loginTabBtn.classList.remove('border-gray-300', 'text-gray-500');
+            signupTabBtn.classList.add('border-gray-300', 'text-gray-500');
+            signupTabBtn.classList.remove('border-violet-600', 'text-violet-800');
+            loginForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+        });
+        
+        signupTabBtn.addEventListener('click', () => {
+            signupTabBtn.classList.add('border-violet-600', 'text-violet-800');
+            signupTabBtn.classList.remove('border-gray-300', 'text-gray-500');
+            loginTabBtn.classList.add('border-gray-300', 'text-gray-500');
+            loginTabBtn.classList.remove('border-violet-600', 'text-violet-800');
+            signupForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+        
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('loginName').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Check against demo credentials or allow any login for demo purposes
+            if ((name === demoCredentials.username && password === demoCredentials.password) || 
+                (name && password)) {
+                // Set current user and show dashboard
+                currentUser = { name, class: 'class1' };
+                currentClass = 'class1';
+                showDashboard();
+            }
+        });
+        
+        // Signup form submission
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const selectedClass = document.getElementById('signupClass').value;
+            
+            // Simple validation
+            if (name && email && password && selectedClass) {
+                // Set current user and show dashboard
+                currentUser = { name, email, class: selectedClass };
+                currentClass = selectedClass;
+                showDashboard();
+            }
+        });
+        
+        // Show dashboard function
+        function showDashboard() {
+            loginPage.classList.add('hidden');
+            materialsPage.classList.add('hidden');
+            dashboardPage.classList.remove('hidden');
+            
+            // Update UI - capitalize teacher name
+            userNameDisplay.textContent = currentUser.name.toUpperCase();
+            classDisplay.textContent = `Class ${currentClass.replace('class', '')}`;
+            
+            // Populate subjects
+            populateSubjects();
+        }
+        
+        // Class dropdown functionality
+        classDropdownBtn.addEventListener('click', () => {
+            classDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!classDropdownBtn.contains(e.target) && !classDropdown.contains(e.target)) {
+                classDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Class selection from dropdown
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const selectedClass = item.getAttribute('data-class');
+                currentClass = selectedClass;
+                classDisplay.textContent = `Class ${selectedClass.replace('class', '')}`;
+                classDropdown.classList.add('hidden');
+                populateSubjects();
+            });
+        });
+        
+        // Populate subjects - only show subjects with materials
+        function populateSubjects() {
+            subjectsContainer.innerHTML = '';
+            let hasSubjectsWithMaterials = false;
+            
+            classSubjects[currentClass].forEach(subject => {
+                // Only show subjects with materials
+                if (materials[currentClass][subject].length > 0) {
+                    hasSubjectsWithMaterials = true;
+                    
+                    const subjectCard = document.createElement('div');
+                    subjectCard.className = `subject-card p-6 rounded-lg shadow-md cursor-pointer ${subjectColors[subject]}`;
+                    subjectCard.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <div class="text-4xl">${subjectIcons[subject]}</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-violet-800">${subject}</h3>
+                                <p class="text-violet-600 text-sm mt-1">${getMaterialCount(currentClass, subject)} materials</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    subjectCard.addEventListener('click', () => {
+                        currentSubject = subject;
+                        showMaterials();
+                    });
+                    
+                    subjectsContainer.appendChild(subjectCard);
+                }
+            });
+            
+            // Show message if no subjects with materials
+            if (!hasSubjectsWithMaterials) {
+                noSubjectsMessage.classList.remove('hidden');
+            } else {
+                noSubjectsMessage.classList.add('hidden');
+            }
+        }
+        
+        // Get material count for a subject
+        function getMaterialCount(className, subject) {
+            return materials[className][subject].length;
+        }
+        
+        // Show materials function
+        function showMaterials() {
+            dashboardPage.classList.add('hidden');
+            materialsPage.classList.remove('hidden');
+            
+            // Update UI
+            subjectDisplay.textContent = currentSubject;
+            
+            // Populate materials
+            populateMaterials();
+        }
+        
+        // Populate materials
+        function populateMaterials() {
+            materialsContainer.innerHTML = '';
+            const subjectMaterials = materials[currentClass][currentSubject];
+            
+            // Update material count display
+            materialCountDisplay.textContent = `${subjectMaterials.length} materials`;
+            
+            if (subjectMaterials.length === 0) {
+                emptyMaterials.classList.remove('hidden');
+            } else {
+                emptyMaterials.classList.add('hidden');
+                
+                subjectMaterials.forEach(material => {
+                    const materialCard = document.createElement('div');
+                    materialCard.className = 'material-card p-4 rounded-lg shadow-sm';
+                    materialCard.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-medium text-violet-800">${material.title}</h4>
+                                <p class="text-violet-600 text-sm mt-1">${material.filename}</p>
+                            </div>
+                            <div class="text-xs text-gray-500">${material.date}</div>
+                        </div>
+                    `;
+                    
+                    materialsContainer.appendChild(materialCard);
+                });
+            }
+        }
+        
+        // Back to subjects button
+        backToSubjectsBtn.addEventListener('click', () => {
+            showDashboard();
+        });
+        
+        // Logout buttons
+        logoutBtn.addEventListener('click', logout);
+        logoutFromMaterialsBtn.addEventListener('click', logout);
+        
+        function logout() {
+            currentUser = null;
+            currentClass = null;
+            currentSubject = null;
+            
+            // Clear forms
+            loginForm.reset();
+            signupForm.reset();
+            
+            // Show login page
+            dashboardPage.classList.add('hidden');
+            materialsPage.classList.add('hidden');
+            loginPage.classList.remove('hidden');
+            
+            // Reset to login tab
+            loginTabBtn.click();
+        }
+        
+        // Add material modal
+        addMaterialBtn.addEventListener('click', () => {
+            addMaterialModal.classList.remove('hidden');
+            addMaterialForm.reset();
+            selectedFileName.classList.add('hidden');
+        });
+        
+        closeModalBtn.addEventListener('click', () => {
+            addMaterialModal.classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside
+        addMaterialModal.addEventListener('click', (e) => {
+            if (e.target === addMaterialModal) {
+                addMaterialModal.classList.add('hidden');
+            }
+        });
+        
+        // Browse files button
+        browseFilesBtn.addEventListener('click', () => {
+            materialDocument.click();
+        });
+        
+        // File selection
+        materialDocument.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFileName.textContent = e.target.files[0].name;
+                selectedFileName.classList.remove('hidden');
+            }
+        });
+        
+        // Add material form submission
+        addMaterialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('materialTitle').value;
+            let filename = 'document.pdf';
+            
+            if (materialDocument.files.length > 0) {
+                filename = materialDocument.files[0].name;
+            }
+            
+            // Create new material
+            const newMaterial = {
+                id: Date.now(),
+                title,
+                filename,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            // Add to materials
+            materials[currentClass][currentSubject].push(newMaterial);
+            
+            // Close modal and refresh materials
+            addMaterialModal.classList.add('hidden');
+            populateMaterials();
+        });
+        
+        // Pre-fill demo credentials
+        document.getElementById('loginName').value = demoCredentials.username;
+        document.getElementById('loginPassword').value = demoCredentials.password;
+    </script>
+</body>
+</html>
