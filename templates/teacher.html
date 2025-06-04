@@ -3,50 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCERT AI - Smart Learning Platform</title>
+    <title>NCERT AI - Nurturing Learning Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f5ff;
+            font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff9f5;
         }
         .auth-container {
-            background: linear-gradient(135deg, #f0e7ff 0%, #e2d5ff 100%);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #fff9f5 0%, #ffeee2 100%);
+            box-shadow: 0 10px 25px rgba(209, 148, 98, 0.1);
         }
         .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
             transition: all 0.3s ease;
         }
         .btn-primary:hover {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            background: linear-gradient(135deg, #d35400 0%, #c44900 100%);
             transform: translateY(-2px);
         }
         .subject-card {
             background: #ffffff;
             transition: all 0.3s ease;
-            border-left: 4px solid #8b5cf6;
+            border-left: 4px solid #e67e22;
+            border-radius: 12px;
         }
         .subject-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(209, 148, 98, 0.15);
         }
         .material-card {
             background: #ffffff;
-            border-left: 4px solid #8b5cf6;
+            border-left: 4px solid #e67e22;
             transition: all 0.3s ease;
+            border-radius: 12px;
         }
         .material-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 15px rgba(209, 148, 98, 0.1);
         }
         .modal {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
         }
         .modal-content {
             background: #ffffff;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(209, 148, 98, 0.2);
+            border-radius: 16px;
         }
         .class-dropdown {
             position: absolute;
@@ -54,19 +57,39 @@
             left: 0;
             width: 100%;
             z-index: 10;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(209, 148, 98, 0.1);
         }
         .dropdown-item {
             transition: all 0.2s ease;
         }
         .dropdown-item:hover {
-            background-color: #f3f0ff;
+            background-color: #fff3e8;
         }
         .logo-text {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        input, select {
+            border-radius: 12px !important;
+        }
+        button {
+            border-radius: 12px !important;
+        }
+        .student-tag {
+            background-color: #fff3e8;
+            border: 1px solid #e67e22;
+            border-radius: 20px;
+            padding: 2px 10px;
+            margin: 2px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .student-tag button {
+            margin-left: 5px;
+            color: #e67e22;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -74,557 +97,970 @@
     <!-- App Container -->
     <div id="app" class="min-h-screen flex flex-col">
         <!-- Login Page -->
-        <div id="loginPage" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-violet-50 to-indigo-50">
-            <div class="auth-container rounded-xl p-8 w-full max-w-md">
+        <div id="loginPage" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-amber-50 to-orange-50">
+            <div class="auth-container rounded-2xl p-8 w-full max-w-md">
                 <div class="text-center mb-8">
                     <h1 class="text-4xl font-bold logo-text">NCERT AI</h1>
-                    <p class="text-violet-700 mt-2">Smart Learning Platform</p>
-                </div>
-                
-                <div class="flex mb-6">
-                    <button id="loginTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-violet-600 text-violet-800">Login</button>
-                    <button id="signupTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-gray-300 text-gray-500">Sign Up</button>
-                </div>
-                
-                <!-- Login Form -->
-                <form id="loginForm" class="space-y-4">
-                    <div>
-                        <label for="loginName" class="block text-sm font-medium text-violet-800 mb-1">Name</label>
-                        <input type="text" id="loginName" value="teacher" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                        <p class="text-xs text-violet-600 mt-1">Demo username: teacher</p>
-                    </div>
-                    <div>
-                        <label for="loginPassword" class="block text-sm font-medium text-violet-800 mb-1">Password</label>
-                        <input type="password" id="loginPassword" value="ncert123" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                        <p class="text-xs text-violet-600 mt-1">Demo password: ncert123</p>
-                    </div>
-                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Login</button>
-                </form>
-                
-                <!-- Signup Form (Hidden by default) -->
-                <form id="signupForm" class="space-y-4 hidden">
-                    <div>
-                        <label for="signupName" class="block text-sm font-medium text-violet-800 mb-1">Name</label>
-                        <input type="text" id="signupName" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                    </div>
-                    <div>
-                        <label for="signupEmail" class="block text-sm font-medium text-violet-800 mb-1">Email</label>
-                        <input type="email" id="signupEmail" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                    </div>
-                    <div>
-                        <label for="signupPassword" class="block text-sm font-medium text-violet-800 mb-1">Password</label>
-                        <input type="password" id="signupPassword" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                    </div>
-                    <div>
-                        <label for="signupClass" class="block text-sm font-medium text-violet-800 mb-1">Class</label>
-                        <select id="signupClass" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                            <option value="">Select Class</option>
-                            <option value="class1">Class 1</option>
-                            <option value="class2">Class 2</option>
-                            <option value="class3">Class 3</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Sign Up</button>
-                </form>
+                    <p class="text-amber-700 mt-2">Nurturing Learning Journey</p>
+                </div>           
+            <div class="flex mb-6">
+                <button id="loginTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-amber-500 text-amber-800">Login</button>
+                <button id="signupTabBtn" class="flex-1 py-2 font-medium text-center border-b-2 border-amber-200 text-amber-400">Sign Up</button>
             </div>
-        </div>
-
-        <!-- Dashboard Page (Hidden by default) -->
-        <div id="dashboardPage" class="min-h-screen flex flex-col hidden">
-            <!-- Header -->
-            <header class="bg-white shadow-md border-b border-violet-100">
-                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <div class="flex items-center space-x-4">
-                        <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
-                        <div id="classDropdownContainer" class="relative">
-                            <button id="classDropdownBtn" class="bg-violet-100 text-violet-700 px-4 py-1 rounded-md text-sm font-medium flex items-center">
-                                <span id="classDisplay">Class 1</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div id="classDropdown" class="class-dropdown bg-white py-2 hidden">
-                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class1">Class 1</div>
-                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class2">Class 2</div>
-                                <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class3">Class 3</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span id="userNameDisplay" class="font-medium text-violet-800"></span>
-                        <button id="logoutBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-4 py-1 rounded-md text-sm font-medium transition">Logout</button>
-                    </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label for="loginName" class="block text-sm font-medium text-amber-800 mb-1">Name</label>
+                    <input type="text" id="loginName" value="teacher" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                    <p class="text-xs text-amber-600 mt-1">Demo username: teacher</p>
                 </div>
-            </header>
-
-            <!-- Main Content -->
-            <main class="flex-grow container mx-auto px-4 py-8">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-violet-800">Available Subjects</h2>
-                    <div class="text-sm text-violet-600 bg-violet-50 px-3 py-1 rounded-md">
-                        Showing subjects with materials
-                    </div>
+                <div>
+                    <label for="loginPassword" class="block text-sm font-medium text-amber-800 mb-1">Password</label>
+                    <input type="password" id="loginPassword" value="ncert123" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                    <p class="text-xs text-amber-600 mt-1">Demo password: ncert123</p>
                 </div>
-                
-                <div id="noSubjectsMessage" class="hidden text-center py-12 bg-white rounded-lg shadow">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    <p class="text-violet-700 mt-4">No subjects with materials available for this class.</p>
+                <button type="submit" class="w-full btn-primary text-white font-medium py-3 px-4 rounded-xl mt-2">Login</button>
+            </form>
+            
+            <!-- Signup Form (Hidden by default) -->
+            <form id="signupForm" class="space-y-4 hidden">
+                <div>
+                    <label for="signupName" class="block text-sm font-medium text-amber-800 mb-1">Name</label>
+                    <input type="text" id="signupName" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
                 </div>
-                
-                <div id="subjectsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Subject cards will be dynamically inserted here -->
+                <div>
+                    <label for="signupEmail" class="block text-sm font-medium text-amber-800 mb-1">Email</label>
+                    <input type="email" id="signupEmail" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
                 </div>
-            </main>
-        </div>
-
-        <!-- Subject Materials Page (Hidden by default) -->
-        <div id="materialsPage" class="min-h-screen flex flex-col hidden">
-            <!-- Header -->
-            <header class="bg-white shadow-md border-b border-violet-100">
-                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <div class="flex items-center space-x-4">
-                        <button id="backToSubjectsBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-3 py-1 rounded-md text-sm font-medium transition flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Back
-                        </button>
-                        <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
-                        <div id="subjectDisplay" class="bg-violet-100 text-violet-700 px-3 py-1 rounded-md text-sm font-medium"></div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <button id="addMaterialBtn" class="bg-violet-600 text-white hover:bg-violet-700 px-4 py-1 rounded-md text-sm font-medium transition flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add Material
-                        </button>
-                        <button id="logoutFromMaterialsBtn" class="bg-violet-100 text-violet-700 hover:bg-violet-200 px-4 py-1 rounded-md text-sm font-medium transition">Logout</button>
-                    </div>
+                <div>
+                    <label for="signupPassword" class="block text-sm font-medium text-amber-800 mb-1">Password</label>
+                    <input type="password" id="signupPassword" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
                 </div>
-            </header>
-
-            <!-- Main Content -->
-            <main class="flex-grow container mx-auto px-4 py-8">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-bold text-violet-800">Course Materials</h2>
-                    <div class="text-sm text-violet-600 bg-violet-50 px-3 py-1 rounded-md" id="materialCountDisplay">
-                        0 materials
-                    </div>
+                <div>
+                    <label for="signupClass" class="block text-sm font-medium text-amber-800 mb-1">Class</label>
+                    <select id="signupClass" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                        <option value="">Select Class</option>
+                        <option value="class9">Class 9</option>
+                        <option value="class10">Class 10</option>
+                    </select>
                 </div>
-                
-                <div id="materialsContainer" class="space-y-4">
-                    <!-- Material cards will be dynamically inserted here -->
-                </div>
-                
-                <div id="emptyMaterials" class="hidden text-center py-12 bg-white rounded-lg shadow">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    <p class="text-violet-700 mt-4">No materials available yet. Click "Add Material" to get started.</p>
-                </div>
-            </main>
-        </div>
-
-        <!-- Add Material Modal (Hidden by default) -->
-        <div id="addMaterialModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
-            <div class="modal-overlay absolute inset-0"></div>
-            <div class="modal-content rounded-lg p-6 w-full max-w-md relative">
-                <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                
-                <h3 class="text-xl font-bold text-violet-800 mb-4">Add New Material</h3>
-                
-                <form id="addMaterialForm" class="space-y-4">
-                    <div>
-                        <label for="materialTitle" class="block text-sm font-medium text-violet-800 mb-1">Title</label>
-                        <input type="text" id="materialTitle" class="w-full px-4 py-2 rounded-md border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500" required>
-                    </div>
-                    <div>
-                        <label for="materialDocument" class="block text-sm font-medium text-violet-800 mb-1">Upload Document</label>
-                        <div class="border-2 border-dashed border-violet-300 rounded-md p-4 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                            <p class="text-sm text-violet-700 mt-2">Click to upload or drag and drop</p>
-                            <p class="text-xs text-violet-600 mt-1">PDF, DOC, PPT, or other document formats</p>
-                            <input type="file" id="materialDocument" class="hidden">
-                            <button type="button" id="browseFilesBtn" class="mt-2 text-sm text-violet-600 underline">Browse files</button>
-                            <p id="selectedFileName" class="mt-2 text-sm text-violet-700 hidden"></p>
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full btn-primary text-white font-medium py-2 px-4 rounded-md">Add Material</button>
-                </form>
-            </div>
+                <button type="submit" class="w-full btn-primary text-white font-medium py-3 px-4 rounded-xl mt-2">Sign Up</button>
+            </form>
         </div>
     </div>
 
-    <script>
-        // Sample data
-        const classSubjects = {
-            'class1': ['Mathematics', 'Science', 'English', 'Social Studies'],
-            'class2': ['Mathematics', 'Science', 'English', 'Social Studies'],
-            'class3': ['Mathematics', 'Science', 'English', 'Social Studies']
-        };
-        
-        const subjectIcons = {
-            'Mathematics': '📐',
-            'Science': '🔬',
-            'English': '📚',
-            'Social Studies': '🌍'
-        };
-        
-        const subjectColors = {
-            'Mathematics': 'border-blue-400',
-            'Science': 'border-green-400',
-            'English': 'border-purple-400',
-            'Social Studies': 'border-yellow-400'
-        };
-        
-        // Store materials data
-        let materials = {
-            'class1': {
-                'Mathematics': [
-                    { id: 1, title: 'Introduction to Numbers', filename: 'numbers.pdf', date: '2023-10-15' },
-                    { id: 2, title: 'Basic Addition', filename: 'addition.pdf', date: '2023-10-18' }
-                ],
-                'Science': [
-                    { id: 3, title: 'Plants and Animals', filename: 'plants.pdf', date: '2023-10-12' }
-                ],
-                'English': [],
-                'Social Studies': []
-            },
-            'class2': {
-                'Mathematics': [
-                    { id: 4, title: 'Multiplication Tables', filename: 'multiplication.pdf', date: '2023-10-10' }
-                ],
-                'Science': [],
-                'English': [
-                    { id: 5, title: 'Basic Grammar', filename: 'grammar.pdf', date: '2023-10-05' }
-                ],
-                'Social Studies': []
-            },
-            'class3': {
-                'Mathematics': [],
-                'Science': [
-                    { id: 6, title: 'Human Body', filename: 'body.pdf', date: '2023-10-01' }
-                ],
-                'English': [],
-                'Social Studies': [
-                    { id: 7, title: 'Our Community', filename: 'community.pdf', date: '2023-09-28' }
-                ]
-            }
-        };
-        
-        // Demo credentials
-        const demoCredentials = {
-            username: 'teacher',
-            password: 'ncert123'
-        };
-        
-        // Current user data
-        let currentUser = null;
-        let currentClass = null;
-        let currentSubject = null;
-        
-        // DOM Elements
-        const loginPage = document.getElementById('loginPage');
-        const dashboardPage = document.getElementById('dashboardPage');
-        const materialsPage = document.getElementById('materialsPage');
-        const loginTabBtn = document.getElementById('loginTabBtn');
-        const signupTabBtn = document.getElementById('signupTabBtn');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const subjectsContainer = document.getElementById('subjectsContainer');
-        const noSubjectsMessage = document.getElementById('noSubjectsMessage');
-        const materialsContainer = document.getElementById('materialsContainer');
-        const emptyMaterials = document.getElementById('emptyMaterials');
-        const classDisplay = document.getElementById('classDisplay');
-        const classDropdownBtn = document.getElementById('classDropdownBtn');
-        const classDropdown = document.getElementById('classDropdown');
-        const subjectDisplay = document.getElementById('subjectDisplay');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        const materialCountDisplay = document.getElementById('materialCountDisplay');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutFromMaterialsBtn = document.getElementById('logoutFromMaterialsBtn');
-        const backToSubjectsBtn = document.getElementById('backToSubjectsBtn');
-        const addMaterialBtn = document.getElementById('addMaterialBtn');
-        const addMaterialModal = document.getElementById('addMaterialModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const addMaterialForm = document.getElementById('addMaterialForm');
-        const browseFilesBtn = document.getElementById('browseFilesBtn');
-        const materialDocument = document.getElementById('materialDocument');
-        const selectedFileName = document.getElementById('selectedFileName');
-        
-        // Tab switching
-        loginTabBtn.addEventListener('click', () => {
-            loginTabBtn.classList.add('border-violet-600', 'text-violet-800');
-            loginTabBtn.classList.remove('border-gray-300', 'text-gray-500');
-            signupTabBtn.classList.add('border-gray-300', 'text-gray-500');
-            signupTabBtn.classList.remove('border-violet-600', 'text-violet-800');
-            loginForm.classList.remove('hidden');
-            signupForm.classList.add('hidden');
-        });
-        
-        signupTabBtn.addEventListener('click', () => {
-            signupTabBtn.classList.add('border-violet-600', 'text-violet-800');
-            signupTabBtn.classList.remove('border-gray-300', 'text-gray-500');
-            loginTabBtn.classList.add('border-gray-300', 'text-gray-500');
-            loginTabBtn.classList.remove('border-violet-600', 'text-violet-800');
-            signupForm.classList.remove('hidden');
-            loginForm.classList.add('hidden');
-        });
-        
-        // Login form submission
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('loginName').value;
-            const password = document.getElementById('loginPassword').value;
+    <!-- OTP Verification Page (Hidden by default) -->
+    <div id="otpPage" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-amber-50 to-orange-50 hidden">
+        <div class="auth-container rounded-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold logo-text">NCERT AI</h1>
+                <p class="text-amber-700 mt-2">OTP Verification</p>
+            </div>
             
-            // Check against demo credentials or allow any login for demo purposes
-            if ((name === demoCredentials.username && password === demoCredentials.password) || 
-                (name && password)) {
-                // Set current user and show dashboard
-                currentUser = { name, class: 'class1' };
-                currentClass = 'class1';
-                showDashboard();
-            }
-        });
-        
-        // Signup form submission
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const selectedClass = document.getElementById('signupClass').value;
-            
-            // Simple validation
-            if (name && email && password && selectedClass) {
-                // Set current user and show dashboard
-                currentUser = { name, email, class: selectedClass };
-                currentClass = selectedClass;
-                showDashboard();
-            }
-        });
-        
-        // Show dashboard function
-        function showDashboard() {
-            loginPage.classList.add('hidden');
-            materialsPage.classList.add('hidden');
-            dashboardPage.classList.remove('hidden');
-            
-            // Update UI - capitalize teacher name
-            userNameDisplay.textContent = currentUser.name.toUpperCase();
-            classDisplay.textContent = `Class ${currentClass.replace('class', '')}`;
-            
-            // Populate subjects
-            populateSubjects();
-        }
-        
-        // Class dropdown functionality
-        classDropdownBtn.addEventListener('click', () => {
-            classDropdown.classList.toggle('hidden');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!classDropdownBtn.contains(e.target) && !classDropdown.contains(e.target)) {
-                classDropdown.classList.add('hidden');
-            }
-        });
-        
-        // Class selection from dropdown
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const selectedClass = item.getAttribute('data-class');
-                currentClass = selectedClass;
-                classDisplay.textContent = `Class ${selectedClass.replace('class', '')}`;
-                classDropdown.classList.add('hidden');
-                populateSubjects();
-            });
-        });
-        
-        // Populate subjects - only show subjects with materials
-        function populateSubjects() {
-            subjectsContainer.innerHTML = '';
-            let hasSubjectsWithMaterials = false;
-            
-            classSubjects[currentClass].forEach(subject => {
-                // Only show subjects with materials
-                if (materials[currentClass][subject].length > 0) {
-                    hasSubjectsWithMaterials = true;
-                    
-                    const subjectCard = document.createElement('div');
-                    subjectCard.className = `subject-card p-6 rounded-lg shadow-md cursor-pointer ${subjectColors[subject]}`;
-                    subjectCard.innerHTML = `
-                        <div class="flex items-center space-x-4">
-                            <div class="text-4xl">${subjectIcons[subject]}</div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-violet-800">${subject}</h3>
-                                <p class="text-violet-600 text-sm mt-1">${getMaterialCount(currentClass, subject)} materials</p>
-                            </div>
+            <div class="mb-6">
+                <p class="text-amber-800 text-center">Please enter the OTP sent to your registered email/phone</p>
+                <p class="text-amber-600 text-sm text-center mt-2">Demo OTP: 1234</p>
+            </div>
+            <form id="otpForm" class="space-y-6 px-6">
+                <div class="flex justify-center gap-2 max-w-xs mx-auto">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-12 text-center border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-12 text-center border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-12 text-center border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-12 text-center border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                </div>
+
+                <div class="text-center">
+                    <button type="button" id="resendOtpBtn" class="text-amber-600 text-sm hover:text-amber-800">Resend OTP</button>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white font-medium py-3 px-4 rounded-xl mt-4">
+                Verify
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Page (Hidden by default) -->
+    <div id="dashboardPage" class="min-h-screen flex flex-col hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-amber-100">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
+                    <div id="classDropdownContainer" class="relative">
+                        <button id="classDropdownBtn" class="bg-amber-50 text-amber-700 px-4 py-2 rounded-xl text-sm font-medium flex items-center">
+                            <span id="classDisplay">Class 9</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="classDropdown" class="class-dropdown bg-white py-2 hidden">
+                            <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class9">Class 9</div>
+                            <div class="dropdown-item px-4 py-2 cursor-pointer" data-class="class10">Class 10</div>
                         </div>
-                    `;
-                    
-                    subjectCard.addEventListener('click', () => {
-                        currentSubject = subject;
-                        showMaterials();
-                    });
-                    
-                    subjectsContainer.appendChild(subjectCard);
-                }
-            });
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userNameDisplay" class="font-medium text-amber-800"></span>
+                    <button id="logoutBtn" class="bg-amber-50 text-amber-700 hover:bg-amber-100 px-4 py-2 rounded-xl text-sm font-medium transition">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-amber-800 section-title">Subjects</h2>
+                <button id="addClassroomBtn" class="bg-amber-500 text-white hover:bg-amber-600 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add Classroom
+                </button>
+            </div>
             
-            // Show message if no subjects with materials
-            if (!hasSubjectsWithMaterials) {
-                noSubjectsMessage.classList.remove('hidden');
-            } else {
-                noSubjectsMessage.classList.add('hidden');
+            <div id="noSubjectsMessage" class="hidden text-center py-12 bg-white rounded-2xl shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <p class="text-amber-700 mt-4">No subjects available for this class.</p>
+            </div>
+            
+            <div id="subjectsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Subject cards will be dynamically inserted here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Subject Materials Page (Hidden by default) -->
+    <div id="materialsPage" class="min-h-screen flex flex-col hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-amber-100">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <button id="backToSubjectsBtn" class="bg-amber-50 text-amber-700 hover:bg-amber-100 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back
+                    </button>
+                    <h1 class="text-2xl font-bold logo-text">NCERT AI</h1>
+                    <div id="subjectDisplay" class="bg-amber-50 text-amber-700 px-4 py-2 rounded-xl text-sm font-medium"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="addMaterialBtn" class="bg-amber-500 text-white hover:bg-amber-600 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add Material
+                    </button>
+                    <button id="logoutFromMaterialsBtn" class="bg-amber-50 text-amber-700 hover:bg-amber-100 px-4 py-2 rounded-xl text-sm font-medium transition">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-amber-800">Course Materials</h2>
+                <div class="text-sm text-amber-600 bg-amber-50 px-4 py-2 rounded-xl" id="materialCountDisplay">
+                    0 materials
+                </div>
+            </div>
+            
+            <div id="materialsContainer" class="space-y-4">
+                <!-- Material cards will be dynamically inserted here -->
+            </div>
+            
+            <div id="emptyMaterials" class="hidden text-center py-12 bg-white rounded-2xl shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <p class="text-amber-700 mt-4">No materials available yet. Click "Add Material" to get started.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Material Modal (Hidden by default) -->
+    <div id="addMaterialModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content rounded-2xl p-6 w-full max-w-md relative">
+            <button id="closeModalBtn" class="absolute top-4 right-4 text-amber-500 hover:text-amber-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold text-amber-800 mb-4">Add New Material</h3>
+            
+            <form id="addMaterialForm" class="space-y-4">
+                <div>
+                    <label for="materialTitle" class="block text-sm font-medium text-amber-800 mb-1">Title</label>
+                    <input type="text" id="materialTitle" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                </div>
+                <div>
+                    <label for="materialDocument" class="block text-sm font-medium text-amber-800 mb-1">Upload Document</label>
+                    <div class="border-2 border-dashed border-amber-200 rounded-xl p-6 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p class="text-sm text-amber-700 mt-3">Click to upload or drag and drop</p>
+                        <p class="text-xs text-amber-600 mt-1">PDF, DOC, PPT, or other document formats</p>
+                        <input type="file" id="materialDocument" class="hidden">
+                        <button type="button" id="browseFilesBtn" class="mt-3 text-sm text-amber-600 underline">Browse files</button>
+                        <p id="selectedFileName" class="mt-2 text-sm text-amber-700 hidden"></p>
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white font-medium py-3 px-4 rounded-xl mt-2">Add Material</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Classroom Modal (Hidden by default) -->
+    <div id="addClassroomModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content rounded-2xl p-6 w-full max-w-md relative">
+            <button id="closeClassroomModalBtn" class="absolute top-4 right-4 text-amber-500 hover:text-amber-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold text-amber-800 mb-4">Add New Classroom</h3>
+            
+            <form id="addClassroomForm" class="space-y-4">
+                <div>
+                    <label for="classroomName" class="block text-sm font-medium text-amber-800 mb-1">Classroom Name</label>
+                    <input type="text" id="classroomName" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                </div>
+                <div>
+                    <label for="classroomSubject" class="block text-sm font-medium text-amber-800 mb-1">Subject</label>
+                    <select id="classroomSubject" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                        <option value="">Select Subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
+                        <option value="Social Studies">Social Studies</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="studentEmail" class="block text-sm font-medium text-amber-800 mb-1">Add Students (Email)</label>
+                    <div class="flex">
+                        <input type="email" id="studentEmail" class="flex-1 px-4 py-3 rounded-l-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                        <button type="button" id="addStudentBtn" class="bg-amber-500 text-white hover:bg-amber-600 px-4 py-3 rounded-r-xl text-sm font-medium transition">Add</button>
+                    </div>
+                    <p class="text-xs text-amber-600 mt-1">Press Add or Enter to add each student</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-amber-800 mb-1">Students</label>
+                    <div id="studentsList" class="border border-amber-200 rounded-xl p-3 min-h-[100px] max-h-[150px] overflow-y-auto">
+                        <!-- Student tags will be added here -->
+                        <p id="noStudentsMessage" class="text-center text-amber-600 text-sm py-2">No students added yet</p>
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white font-medium py-3 px-4 rounded-xl mt-2">Create Classroom</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quiz Modal (Hidden by default) -->
+    <div id="quizModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content rounded-2xl p-6 w-full max-w-md relative">
+            <button id="closeQuizModalBtn" class="absolute top-4 right-4 text-amber-500 hover:text-amber-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold text-amber-800 mb-4">Generate Quiz</h3>
+            
+            <form id="generateQuizForm" class="space-y-4">
+                <div>
+                    <label for="quizSubject" class="block text-sm font-medium text-amber-800 mb-1">Subject</label>
+                    <input type="text" id="quizSubject" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" readonly>
+                </div>
+                <div>
+                    <label for="quizTopic" class="block text-sm font-medium text-amber-800 mb-1">Topic</label>
+                    <input type="text" id="quizTopic" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required placeholder="e.g. Algebra, Photosynthesis">
+                </div>
+                <div>
+                    <label for="quizQuestions" class="block text-sm font-medium text-amber-800 mb-1">Number of Questions</label>
+                    <select id="quizQuestions" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                        <option value="5">5 Questions</option>
+                        <option value="10" selected>10 Questions</option>
+                        <option value="15">15 Questions</option>
+                        <option value="20">20 Questions</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="quizDifficulty" class="block text-sm font-medium text-amber-800 mb-1">Difficulty Level</label>
+                    <select id="quizDifficulty" class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white font-medium py-3 px-4 rounded-xl mt-2">Generate Quiz</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sample data
+    const classSubjects = {
+        'class9': ['Mathematics', 'Science', 'English', 'Social Studies'],
+        'class10': ['Mathematics', 'Science', 'English', 'Social Studies']
+    };
+    
+    const subjectIcons = {
+        'Mathematics': '📐',
+        'Science': '🔬',
+        'English': '📚',
+        'Social Studies': '🌍'
+    };
+    
+    const subjectColors = {
+        'Mathematics': 'border-amber-400',
+        'Science': 'border-green-400',
+        'English': 'border-purple-400',
+        'Social Studies': 'border-yellow-400'
+    };
+    
+    // Store materials data
+    let materials = {
+        'class9': {
+            'Mathematics': [
+                { id: 1, title: 'Algebra Fundamentals', filename: 'algebra.pdf', date: '2023-10-15' },
+                { id: 2, title: 'Geometry Basics', filename: 'geometry.pdf', date: '2023-10-18' }
+            ],
+            'Science': [
+                { id: 3, title: 'Physics: Motion and Force', filename: 'physics.pdf', date: '2023-10-12' }
+            ],
+            'English': [],
+            'Social Studies': []
+        },
+        'class10': {
+            'Mathematics': [
+                { id: 4, title: 'Trigonometry', filename: 'trigonometry.pdf', date: '2023-10-10' }
+            ],
+            'Science': [],
+            'English': [
+                { id: 5, title: 'Advanced Grammar', filename: 'grammar.pdf', date: '2023-10-05' }
+            ],
+            'Social Studies': []
+        }
+    };
+
+    // Store classrooms data
+    let classrooms = {
+        'class9': [
+            {
+                id: 1,
+                name: 'Math Group A',
+                subject: 'Mathematics',
+                students: ['student1@example.com', 'student2@example.com']
             }
+        ],
+        'class10': [
+            {
+                id: 2,
+                name: 'Science Group B',
+                subject: 'Science',
+                students: ['student3@example.com', 'student4@example.com']
+            }
+        ]
+    };
+    
+    // Demo credentials
+    const demoCredentials = {
+        username: 'teacher',
+        password: 'ncert123',
+        otp: '1234'
+    };
+    
+    // Current user data
+    let currentUser = null;
+    let currentClass = null;
+    let currentSubject = null;
+    let tempStudentsList = [];
+    
+    // DOM Elements
+    const loginPage = document.getElementById('loginPage');
+    const otpPage = document.getElementById('otpPage');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const materialsPage = document.getElementById('materialsPage');
+    const loginTabBtn = document.getElementById('loginTabBtn');
+    const signupTabBtn = document.getElementById('signupTabBtn');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const otpForm = document.getElementById('otpForm');
+    const subjectsContainer = document.getElementById('subjectsContainer');
+    const noSubjectsMessage = document.getElementById('noSubjectsMessage');
+    const materialsContainer = document.getElementById('materialsContainer');
+    const emptyMaterials = document.getElementById('emptyMaterials');
+    const classDisplay = document.getElementById('classDisplay');
+    const classDropdownBtn = document.getElementById('classDropdownBtn');
+    const classDropdown = document.getElementById('classDropdown');
+    const subjectDisplay = document.getElementById('subjectDisplay');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const materialCountDisplay = document.getElementById('materialCountDisplay');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutFromMaterialsBtn = document.getElementById('logoutFromMaterialsBtn');
+    const backToSubjectsBtn = document.getElementById('backToSubjectsBtn');
+    const addMaterialBtn = document.getElementById('addMaterialBtn');
+    const addMaterialModal = document.getElementById('addMaterialModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const addMaterialForm = document.getElementById('addMaterialForm');
+    const browseFilesBtn = document.getElementById('browseFilesBtn');
+    const materialDocument = document.getElementById('materialDocument');
+    const selectedFileName = document.getElementById('selectedFileName');
+    const addClassroomBtn = document.getElementById('addClassroomBtn');
+    const addClassroomModal = document.getElementById('addClassroomModal');
+    const closeClassroomModalBtn = document.getElementById('closeClassroomModalBtn');
+    const addClassroomForm = document.getElementById('addClassroomForm');
+    const studentEmail = document.getElementById('studentEmail');
+    const addStudentBtn = document.getElementById('addStudentBtn');
+    const studentsList = document.getElementById('studentsList');
+    const noStudentsMessage = document.getElementById('noStudentsMessage');
+    const resendOtpBtn = document.getElementById('resendOtpBtn');
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const quizModal = document.getElementById('quizModal');
+    const closeQuizModalBtn = document.getElementById('closeQuizModalBtn');
+    const generateQuizForm = document.getElementById('generateQuizForm');
+    const quizSubject = document.getElementById('quizSubject');
+    
+    // Tab switching
+    loginTabBtn.addEventListener('click', () => {
+        loginTabBtn.classList.add('border-amber-500', 'text-amber-800');
+        loginTabBtn.classList.remove('border-amber-200', 'text-amber-400');
+        signupTabBtn.classList.add('border-amber-200', 'text-amber-400');
+        signupTabBtn.classList.remove('border-amber-500', 'text-amber-800');
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+    });
+    
+    signupTabBtn.addEventListener('click', () => {
+        signupTabBtn.classList.add('border-amber-500', 'text-amber-800');
+        signupTabBtn.classList.remove('border-amber-200', 'text-amber-400');
+        loginTabBtn.classList.add('border-amber-200', 'text-amber-400');
+        loginTabBtn.classList.remove('border-amber-500', 'text-amber-800');
+        signupForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+    });
+    
+    // Login form submission
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('loginName').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Check against demo credentials or allow any login for demo purposes
+        if ((name === demoCredentials.username && password === demoCredentials.password) || 
+            (name && password)) {
+            // Store user info temporarily and show OTP page
+            currentUser = { name, class: 'class9' };
+            currentClass = 'class9';
+            showOtpPage();
+        }
+    });
+    
+    // Show OTP page
+    function showOtpPage() {
+        loginPage.classList.add('hidden');
+        otpPage.classList.remove('hidden');
+        
+        // Pre-fill OTP for demo
+        otpInputs[0].value = '1';
+        otpInputs[1].value = '2';
+        otpInputs[2].value = '3';
+        otpInputs[3].value = '4';
+        
+        // Focus on first input
+        otpInputs[0].focus();
+    }
+    
+    // OTP input handling
+    otpInputs.forEach((input, index) => {
+        input.addEventListener('keyup', (e) => {
+            // Move to next input on keyup
+            if (e.key !== 'Backspace' && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
+            
+            // Move to previous input on backspace
+            if (e.key === 'Backspace' && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+            
+            // Auto-submit when all fields are filled
+            if (areAllOtpFieldsFilled()) {
+                // Small delay to allow the last digit to be visible
+                setTimeout(() => {
+                    verifyOtp();
+                }, 300);
+            }
+        });
+    });
+    
+    // Check if all OTP fields are filled
+    function areAllOtpFieldsFilled() {
+        return Array.from(otpInputs).every(input => input.value.length === 1);
+    }
+    
+    // OTP form submission
+    otpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        verifyOtp();
+    });
+    
+    // Verify OTP
+    function verifyOtp() {
+        const enteredOtp = Array.from(otpInputs).map(input => input.value).join('');
+        
+        // For demo purposes, accept any OTP or check against demo OTP
+        if (enteredOtp === demoCredentials.otp || enteredOtp.length === 4) {
+            showDashboard();
+        } else {
+            alert('Invalid OTP. Please try again.');
+        }
+    }
+    
+    // Resend OTP button
+    resendOtpBtn.addEventListener('click', () => {
+        alert('OTP resent! (Demo: 1234)');
+    });
+    
+    // Signup form submission
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const selectedClass = document.getElementById('signupClass').value;
+        
+        // Simple validation
+        if (name && email && password && selectedClass) {
+            // Set current user and show OTP page
+            currentUser = { name, email, class: selectedClass };
+            currentClass = selectedClass;
+            showOtpPage();
+        }
+    });
+    
+    // Show dashboard function
+    function showDashboard() {
+        loginPage.classList.add('hidden');
+        otpPage.classList.add('hidden');
+        materialsPage.classList.add('hidden');
+        dashboardPage.classList.remove('hidden');
+        
+        // Update UI - capitalize teacher name
+        userNameDisplay.textContent = currentUser.name.toUpperCase();
+        classDisplay.textContent = `Class ${currentClass.replace('class', '')}`;
+        
+        // Populate subjects
+        populateSubjects();
+    }
+    
+    // Class dropdown functionality
+    classDropdownBtn.addEventListener('click', () => {
+        classDropdown.classList.toggle('hidden');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!classDropdownBtn.contains(e.target) && !classDropdown.contains(e.target)) {
+            classDropdown.classList.add('hidden');
+        }
+    });
+    
+    // Class selection from dropdown
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const selectedClass = item.getAttribute('data-class');
+            currentClass = selectedClass;
+            classDisplay.textContent = `Class ${selectedClass.replace('class', '')}`;
+            classDropdown.classList.add('hidden');
+            populateSubjects();
+        });
+    });
+    
+    // Populate subjects with integrated classrooms
+    function populateSubjects() {
+        subjectsContainer.innerHTML = '';
+        let hasSubjects = false;
+        
+        classSubjects[currentClass].forEach(subject => {
+            hasSubjects = true;
+            
+            // Get classrooms for this subject
+            const subjectClassrooms = classrooms[currentClass]?.filter(c => c.subject === subject) || [];
+            
+            // Get materials count
+            const materialsCount = materials[currentClass][subject].length;
+            
+            const subjectCard = document.createElement('div');
+            subjectCard.className = `subject-card p-6 rounded-xl shadow-md ${subjectColors[subject]}`;
+            
+            // Create classroom badges HTML if any classrooms exist
+            let classroomBadgesHTML = '';
+            if (subjectClassrooms.length > 0) {
+                classroomBadgesHTML = '<div class="mt-3">';
+                subjectClassrooms.forEach(classroom => {
+                    classroomBadgesHTML += `
+                        <span class="classroom-badge mr-2 mb-2">
+                            <span class="mr-1">👨‍🏫</span> ${classroom.name} (${classroom.students.length})
+                        </span>
+                    `;
+                });
+                classroomBadgesHTML += '</div>';
+            }
+            
+            subjectCard.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <div class="text-4xl">${subjectIcons[subject]}</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-amber-800">${subject}</h3>
+                        <p class="text-amber-600 text-sm mt-1">${materialsCount} materials</p>
+                        ${classroomBadgesHTML}
+                    </div>
+                </div>
+                <div class="flex mt-4 pt-4 border-t border-amber-100 justify-between">
+                    <button class="view-materials-btn bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-2 rounded-lg text-sm font-medium transition action-button flex items-center" data-subject="${subject}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Materials
+                    </button>
+                    <button class="quiz-btn bg-green-100 hover:bg-green-200 text-green-800 px-3 py-2 rounded-lg text-sm font-medium transition action-button flex items-center" data-subject="${subject}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Quiz
+                    </button>
+                </div>
+            `;
+            
+            subjectsContainer.appendChild(subjectCard);
+        });
+        
+        // Show message if no subjects
+        if (!hasSubjects) {
+            noSubjectsMessage.classList.remove('hidden');
+        } else {
+            noSubjectsMessage.classList.add('hidden');
         }
         
-        // Get material count for a subject
-        function getMaterialCount(className, subject) {
-            return materials[className][subject].length;
-        }
+        // Add event listeners to view materials buttons
+        document.querySelectorAll('.view-materials-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentSubject = btn.getAttribute('data-subject');
+                showMaterials();
+            });
+        });
         
-        // Show materials function
-        function showMaterials() {
-            dashboardPage.classList.add('hidden');
-            materialsPage.classList.remove('hidden');
-            
-            // Update UI
-            subjectDisplay.textContent = currentSubject;
-            
-            // Populate materials
-            populateMaterials();
+        // Add event listeners to quiz buttons
+        document.querySelectorAll('.quiz-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const subject = btn.getAttribute('data-subject');
+                showQuizModal(subject);
+            });
+        });
+    }
+    
+    // Show quiz modal
+    function showQuizModal(subject) {
+        quizModal.classList.remove('hidden');
+        quizSubject.value = subject;
+    }
+    
+    // Close quiz modal
+    closeQuizModalBtn.addEventListener('click', () => {
+        quizModal.classList.add('hidden');
+    });
+    
+    // Close quiz modal when clicking outside
+    quizModal.addEventListener('click', (e) => {
+        if (e.target === quizModal) {
+            quizModal.classList.add('hidden');
         }
+    });
+    
+    // Generate quiz form submission
+    generateQuizForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const subject = quizSubject.value;
+        const topic = document.getElementById('quizTopic').value;
+        const questions = document.getElementById('quizQuestions').value;
+        const difficulty = document.getElementById('quizDifficulty').value;
+        
+        // For demo purposes, just show an alert
+        alert(`Quiz generated for ${subject} on topic "${topic}" with ${questions} ${difficulty} questions. The quiz would be available in the materials section.`);
+        
+        quizModal.classList.add('hidden');
+    });
+    
+    // Get material count for a subject
+    function getMaterialCount(className, subject) {
+        return materials[className][subject].length;
+    }
+    
+    // Show materials function
+    function showMaterials() {
+        dashboardPage.classList.add('hidden');
+        materialsPage.classList.remove('hidden');
+        
+        // Update UI
+        subjectDisplay.textContent = currentSubject;
         
         // Populate materials
-        function populateMaterials() {
-            materialsContainer.innerHTML = '';
-            const subjectMaterials = materials[currentClass][currentSubject];
+        populateMaterials();
+    }
+    
+    // Populate materials
+    function populateMaterials() {
+        materialsContainer.innerHTML = '';
+        const subjectMaterials = materials[currentClass][currentSubject];
+        
+        // Update material count display
+        materialCountDisplay.textContent = `${subjectMaterials.length} materials`;
+        
+        if (subjectMaterials.length === 0) {
+            emptyMaterials.classList.remove('hidden');
+        } else {
+            emptyMaterials.classList.add('hidden');
             
-            // Update material count display
-            materialCountDisplay.textContent = `${subjectMaterials.length} materials`;
-            
-            if (subjectMaterials.length === 0) {
-                emptyMaterials.classList.remove('hidden');
-            } else {
-                emptyMaterials.classList.add('hidden');
-                
-                subjectMaterials.forEach(material => {
-                    const materialCard = document.createElement('div');
-                    materialCard.className = 'material-card p-4 rounded-lg shadow-sm';
-                    materialCard.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="font-medium text-violet-800">${material.title}</h4>
-                                <p class="text-violet-600 text-sm mt-1">${material.filename}</p>
-                            </div>
-                            <div class="text-xs text-gray-500">${material.date}</div>
+            subjectMaterials.forEach(material => {
+                const materialCard = document.createElement('div');
+                materialCard.className = 'material-card p-5 rounded-xl shadow-sm';
+                materialCard.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-amber-800">${material.title}</h4>
+                            <p class="text-amber-600 text-sm mt-1">${material.filename}</p>
                         </div>
-                    `;
-                    
-                    materialsContainer.appendChild(materialCard);
-                });
-            }
+                        <div class="text-xs text-amber-500">${material.date}</div>
+                    </div>
+                `;
+                
+                materialsContainer.appendChild(materialCard);
+            });
         }
+    }
+    
+    // Back to subjects button
+    backToSubjectsBtn.addEventListener('click', () => {
+        showDashboard();
+    });
+    
+    // Logout buttons
+    logoutBtn.addEventListener('click', logout);
+    logoutFromMaterialsBtn.addEventListener('click', logout);
+    
+    function logout() {
+        currentUser = null;
+        currentClass = null;
+        currentSubject = null;
         
-        // Back to subjects button
-        backToSubjectsBtn.addEventListener('click', () => {
-            showDashboard();
-        });
+        // Clear forms
+        loginForm.reset();
+        signupForm.reset();
+        otpForm.reset();
         
-        // Logout buttons
-        logoutBtn.addEventListener('click', logout);
-        logoutFromMaterialsBtn.addEventListener('click', logout);
+        // Show login page
+        dashboardPage.classList.add('hidden');
+        materialsPage.classList.add('hidden');
+        otpPage.classList.add('hidden');
+        loginPage.classList.remove('hidden');
         
-        function logout() {
-            currentUser = null;
-            currentClass = null;
-            currentSubject = null;
-            
-            // Clear forms
-            loginForm.reset();
-            signupForm.reset();
-            
-            // Show login page
-            dashboardPage.classList.add('hidden');
-            materialsPage.classList.add('hidden');
-            loginPage.classList.remove('hidden');
-            
-            // Reset to login tab
-            loginTabBtn.click();
-        }
-        
-        // Add material modal
-        addMaterialBtn.addEventListener('click', () => {
-            addMaterialModal.classList.remove('hidden');
-            addMaterialForm.reset();
-            selectedFileName.classList.add('hidden');
-        });
-        
-        closeModalBtn.addEventListener('click', () => {
+        // Reset to login tab
+        loginTabBtn.click();
+    }
+    
+    // Add material modal
+    addMaterialBtn.addEventListener('click', () => {
+        addMaterialModal.classList.remove('hidden');
+        addMaterialForm.reset();
+        selectedFileName.classList.add('hidden');
+    });
+    
+    closeModalBtn.addEventListener('click', () => {
+        addMaterialModal.classList.add('hidden');
+    });
+    
+    // Close modal when clicking outside
+    addMaterialModal.addEventListener('click', (e) => {
+        if (e.target === addMaterialModal) {
             addMaterialModal.classList.add('hidden');
-        });
+        }
+    });
+    
+    // Browse files button
+    browseFilesBtn.addEventListener('click', () => {
+        materialDocument.click();
+    });
+    
+    // File selection
+    materialDocument.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            selectedFileName.textContent = e.target.files[0].name;
+            selectedFileName.classList.remove('hidden');
+        }
+    });
+    
+    // Add material form submission
+    addMaterialForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         
-        // Close modal when clicking outside
-        addMaterialModal.addEventListener('click', (e) => {
-            if (e.target === addMaterialModal) {
-                addMaterialModal.classList.add('hidden');
-            }
-        });
+        const title = document.getElementById('materialTitle').value;
+        let filename = 'document.pdf';
         
-        // Browse files button
-        browseFilesBtn.addEventListener('click', () => {
-            materialDocument.click();
-        });
+        if (materialDocument.files.length > 0) {
+            filename = materialDocument.files[0].name;
+        }
         
-        // File selection
-        materialDocument.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                selectedFileName.textContent = e.target.files[0].name;
-                selectedFileName.classList.remove('hidden');
-            }
-        });
+        // Create new material
+        const newMaterial = {
+            id: Date.now(),
+            title,
+            filename,
+            date: new Date().toISOString().split('T')[0]
+        };
         
-        // Add material form submission
-        addMaterialForm.addEventListener('submit', (e) => {
+        // Add to materials
+        materials[currentClass][currentSubject].push(newMaterial);
+        
+        // Close modal and refresh materials
+        addMaterialModal.classList.add('hidden');
+        populateMaterials();
+    });
+
+    // Add classroom modal
+    addClassroomBtn.addEventListener('click', () => {
+        addClassroomModal.classList.remove('hidden');
+        addClassroomForm.reset();
+        tempStudentsList = [];
+        updateStudentsList();
+    });
+
+    closeClassroomModalBtn.addEventListener('click', () => {
+        addClassroomModal.classList.add('hidden');
+    });
+
+    // Close classroom modal when clicking outside
+    addClassroomModal.addEventListener('click', (e) => {
+        if (e.target === addClassroomModal) {
+            addClassroomModal.classList.add('hidden');
+        }
+    });
+
+    // Add student to temporary list
+    function addStudent() {
+        const email = studentEmail.value.trim();
+        if (email && isValidEmail(email) && !tempStudentsList.includes(email)) {
+            tempStudentsList.push(email);
+            updateStudentsList();
+            studentEmail.value = '';
+        } else if (tempStudentsList.includes(email)) {
+            // Show error that student already exists
+            alert('This student is already added to the classroom.');
+        } else if (email && !isValidEmail(email)) {
+            // Show error for invalid email
+            alert('Please enter a valid email address.');
+        }
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    // Add student button click
+    addStudentBtn.addEventListener('click', addStudent);
+
+    // Add student on Enter key
+    studentEmail.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
             e.preventDefault();
+            addStudent();
+        }
+    });
+
+    // Update students list display
+    function updateStudentsList() {
+        if (tempStudentsList.length === 0) {
+            noStudentsMessage.classList.remove('hidden');
+            studentsList.querySelectorAll('.student-tag').forEach(tag => tag.remove());
+        } else {
+            noStudentsMessage.classList.add('hidden');
+            studentsList.querySelectorAll('.student-tag').forEach(tag => tag.remove());
             
-            const title = document.getElementById('materialTitle').value;
-            let filename = 'document.pdf';
-            
-            if (materialDocument.files.length > 0) {
-                filename = materialDocument.files[0].name;
-            }
-            
-            // Create new material
-            const newMaterial = {
+            tempStudentsList.forEach((email, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'student-tag text-xs mb-1';
+                tag.innerHTML = `
+                    <span>${email}</span>
+                    <button type="button" class="remove-student" data-index="${index}">×</button>
+                `;
+                studentsList.appendChild(tag);
+            });
+
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.remove-student').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    tempStudentsList.splice(index, 1);
+                    updateStudentsList();
+                });
+            });
+        }
+    }
+
+    // Add classroom form submission
+    addClassroomForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('classroomName').value;
+        const subject = document.getElementById('classroomSubject').value;
+        
+        if (name && subject && tempStudentsList.length > 0) {
+            // Create new classroom
+            const newClassroom = {
                 id: Date.now(),
-                title,
-                filename,
-                date: new Date().toISOString().split('T')[0]
+                name,
+                subject,
+                students: [...tempStudentsList]
             };
             
-            // Add to materials
-            materials[currentClass][currentSubject].push(newMaterial);
+            // Add to classrooms
+            if (!classrooms[currentClass]) {
+                classrooms[currentClass] = [];
+            }
+            classrooms[currentClass].push(newClassroom);
             
-            // Close modal and refresh materials
-            addMaterialModal.classList.add('hidden');
-            populateMaterials();
-        });
-        
-        // Pre-fill demo credentials
-        document.getElementById('loginName').value = demoCredentials.username;
-        document.getElementById('loginPassword').value = demoCredentials.password;
-    </script>
-</body>
-</html>
+            // Close modal
+            addClassroomModal.classList.add('hidden');
+            
+            // Refresh subjects display to show new classroom
+            populateSubjects();
+            
+            // Show success message
+            alert(`Classroom "${name}" created successfully with ${tempStudentsList.length} students!`);
+            
+            // Reset temp list
+            tempStudentsList = [];
+        } else {
+            // Show error
+            alert('Please fill all fields and add at least one student.');
+        }
+    });
+    
+    // Pre-fill demo credentials
+    document.getElementById('loginName').value = demoCredentials.username;
+    document.getElementById('loginPassword').value = demoCredentials.password;
+</script>
